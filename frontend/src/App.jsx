@@ -1,0 +1,20 @@
+import { Routes, Route } from 'react-router-dom'
+import Home from './pages/home'
+import Welcome from './pages/welcome'
+import TokenInfo from './pages/tokenInfo'
+import TransHisto from './pages/transHisto'
+import SentConfirm from './pages/sentConfirm'
+
+export default function App() {
+  return (
+    <div className="App">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/welcome" element={<Welcome />} />
+        <Route path="/token-info" element={<TokenInfo />} />
+        <Route path="/transaction-history" element={<TransHisto />} />
+        <Route path="/sent-confirm" element={<SentConfirm />} />
+      </Routes>
+    </div>
+  )
+}
