@@ -4,16 +4,19 @@ import Welcome from './pages/welcome'
 import TokenInfo from './pages/tokenInfo'
 import TransHisto from './pages/transHisto'
 import SentConfirm from './pages/sentConfirm'
+import Terms from './pages/terms'
+import About from './pages/about'
 
 export default function App() {
   return (
-    <div className="App">
-      <Routes>
+    <div className="App">      <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/token-info" element={<TokenInfo />} />
         <Route path="/transaction-history" element={<TransHisto />} />
         <Route path="/sent-confirm" element={<SentConfirm />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </div>
   )

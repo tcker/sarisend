@@ -3,8 +3,10 @@ import apt from "../assets/Aptos.png"
 import btc from "../assets/BTC.png"
 import eth from "../assets/ETH.png"
 import { MoreHorizontal } from 'lucide-react'
+import { Link } from 'react-router-dom'
+
 export default function Token() {
-     const tokens = [
+  const tokens = [
     { 
       name: 'Aptos', 
       symbol: 'APT', 
@@ -54,18 +56,24 @@ export default function Token() {
       icon: eth
     }
   ];
+
   return (
-     <div className="mb-6">
-            <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-medium">Tokens</h2>
-            <button>
-                <MoreHorizontal className="w-5 h-5 text-gray-400" />
-            </button>
-            </div>
-        
-        <div className="space-y-3">
-          {tokens.map((token, index) => (
-            <div key={index} className="bg-gray-700/50 backdrop-blur-sm border border-gray-600 rounded-xl p-4 flex items-center justify-between">
+    <div className="mb-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-medium">Tokens</h2>
+        <button>
+          <MoreHorizontal className="w-5 h-5 text-gray-400" />
+        </button>
+      </div>
+      
+      <div className="space-y-3">
+        {tokens.map((token, index) => (
+          <Link 
+            key={index} 
+            to="/token-info"
+            className="block hover:opacity-80 transition-opacity"
+          >
+            <div className="bg-gray-700/50 backdrop-blur-sm border border-gray-600 rounded-xl p-4 flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center p-2">
                   <img 
@@ -83,8 +91,9 @@ export default function Token() {
                 </p>
               </div>
             </div>
-          ))}
-        </div>
+          </Link>
+        ))}
       </div>
+    </div>
   )
 }
