@@ -17,7 +17,7 @@ export default function Home() {
         />
       </div>
       
-      <header className="relative z-10 flex items-center justify-between mb-8 pt-4">
+      <header className="relative flex items-center justify-between mb-8 pt-4">
         <UserProfile profileImage={user} />
         <button className="bg-green-500 text-black rounded-full px-6 py-2 font-mono shadow-md shadow-green-500/80 hover:shadow-green-500/90 transition-all duration-200">
           Connect Wallet
