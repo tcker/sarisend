@@ -3,7 +3,8 @@ import { QrCode, Send, Download, MoreHorizontal, User } from "lucide-react";
 import UserProfile from "../components/icon";
 import user from "../assets/userPfp.jpg";
 import Ellipsis from '../assets/Ellipse.png'
-
+import Token from "../components/token";
+import Ads from '../components/ads'
 export default function Home() {
   return (
     <main className="min-h-screen mx-4 p-4 relative overflow-hidden">
@@ -59,6 +60,10 @@ export default function Home() {
           <span className="text-green-500 font-medium">Receive</span>
         </button>
       </section>
+
+
+    <Ads/>
+    <Token/>
     </main>
   );
 }
