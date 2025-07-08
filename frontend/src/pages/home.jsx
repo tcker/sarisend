@@ -8,7 +8,6 @@ import Ads from '../components/ads'
 export default function Home() {
   return (
     <main className="min-h-screen mx-4 p-4 relative overflow-hidden">
-      {/* Background Ellipsis */}
       <div className="absolute top-[-6rem]">
         <img 
           src={Ellipsis} 
@@ -26,7 +25,7 @@ export default function Home() {
 
       <section className="relative z-10 flex-col items-center gap-2">
         <p>Balance</p>
-        <h1 className="text-5xl">$23,000.00</h1>
+        <h1 className="text-4xl">$23,000.00</h1>
       </section>
 
       <section className="relative z-10 bg-gradient-to-b from-[#FFFDFD]/40 via-[#FFFDFD]/20 to-[#FFFFFF]/0 backdrop-blur-sm border border-gray-600 rounded-2xl p-8 mb-6 mt-10">

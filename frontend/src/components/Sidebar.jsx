@@ -1,12 +1,12 @@
 import React from 'react'
 import { X, History, FileText, Info, LogOut } from 'lucide-react'
 import { Link } from 'react-router-dom'
-
+import user from '../assets/userPfp.jpg'
 export default function Sidebar({ 
   isOpen, 
   onClose, 
   name = "John Doe", 
-  profileImage = "/logo.png" 
+  profileImage = user 
 }) {
   const menuItems = [
     { icon: History, label: "Transaction History", to: "/transaction-history" },
