@@ -183,7 +183,7 @@ export default function Home() {
 
       {mode === "send" && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center">
-          <div className="bg-zinc-900 p-6 rounded-xl border border-gray-700 w-full max-w-sm relative">
+          <div className="bg-zinc-900 p-6 rounded-xl border border-gray-900 w-full max-w-xl relative">
             <button onClick={() => setMode("")} className="absolute top-2 right-2 text-gray-300 hover:text-white">
               <X />
             </button>
