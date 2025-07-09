@@ -46,7 +46,7 @@ export default function Home() {
 
   useEffect(() => {
     if (wallet && canvasRef.current && mode === "receive") {
-      QRCode.toCanvas(canvasRef.current, wallet, { width: 180 }, (err) => {
+      QRCode.toCanvas(canvasRef.current, wallet, { width: 340 }, (err) => {
         if (err) console.error(err);
       });
     }
@@ -151,7 +151,7 @@ export default function Home() {
 
       {mode === "receive" && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center">
-          <div className="bg-zinc-900 p-6 rounded-xl border border-gray-700 w-full max-w-xs relative">
+          <div className="bg-zinc-900 p-6 rounded-xl border border-gray-700 w-full max-w-lg relative">
             <button onClick={() => setMode("")} className="absolute top-2 right-2 text-gray-300 hover:text-white">
               <X />
             </button>

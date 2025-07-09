@@ -7,49 +7,49 @@
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "c7b6926e",
+      "fileHash": "f07aaf8b",
       "needsInterop": true
     },
     "react-dom/client": {
       "src": "../../node_modules/react-dom/client.js",
       "file": "react-dom_client.js",
-      "fileHash": "cabee5ab",
+      "fileHash": "1e0343b7",
       "needsInterop": true
     },
     "react-router-dom": {
       "src": "../../node_modules/react-router-dom/dist/index.mjs",
       "file": "react-router-dom.js",
-      "fileHash": "6a390b3c",
+      "fileHash": "9ccc56af",
       "needsInterop": false
     },
     "lucide-react": {
       "src": "../../node_modules/lucide-react/dist/esm/lucide-react.js",
       "file": "lucide-react.js",
-      "fileHash": "6d99d070",
+      "fileHash": "44671413",
       "needsInterop": false
     },
     "qrcode": {
       "src": "../../node_modules/qrcode/lib/browser.js",
       "file": "qrcode.js",
-      "fileHash": "c17d14d5",
+      "fileHash": "9d7fd2b3",
       "needsInterop": true
     },
     "chart.js": {
       "src": "../../node_modules/chart.js/dist/chart.js",
       "file": "chart__js.js",
-      "fileHash": "33672cd3",
+      "fileHash": "c0032bfd",
       "needsInterop": false
     },
     "react-chartjs-2": {
       "src": "../../node_modules/react-chartjs-2/dist/index.js",
       "file": "react-chartjs-2.js",
-      "fileHash": "e921dfd7",
+      "fileHash": "ef4a76a7",
       "needsInterop": false
     },
     "@zxing/browser": {
       "src": "../../node_modules/@zxing/browser/esm/index.js",
       "file": "@zxing_browser.js",
-      "fileHash": "b704f3d8",
+      "fileHash": "4783a001",
       "needsInterop": false
     }
   },
