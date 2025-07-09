@@ -1,15 +1,14 @@
 [package]
 name = "sarisend"
-version = "1.0.0"
-authors = []
+version = "0.1.0"
+authors = ["YourName"]
 
 [addresses]
+sarisend = "0xa6f73c189fefdbf3c1e92291d8baf18f6183f744701e40fb4ea7b1b77546b2f7"
+AptosFramework = "0x1"
 
-[dev-addresses]
-
-[dependencies.AptosFramework]
-git = "https://github.com/aptos-labs/aptos-framework.git"
-rev = "mainnet"
-subdir = "aptos-framework"
+[dependencies]
+AptosFramework = { git = "https://github.com/aptos-labs/aptos-core.git", subdir = "aptos-move/framework/aptos-framework", rev = "main" }
 
 [dev-dependencies]
+# any dev dependencies here, but NOT your address!
