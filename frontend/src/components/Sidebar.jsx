@@ -7,6 +7,7 @@ export default function Sidebar({
   isOpen,
   onClose,
   walletAddress = "",
+  disconnectWallet,
   profileImage = user,
 }) {
   const menuItems = [
@@ -90,21 +91,21 @@ export default function Sidebar({
           </ul>
         </nav>
 
-        <footer className="mt-auto p-4 border-t border-gray-700/50">
-          <button
-            onClick={() => {
-              console.log("Logout");
-              onClose();
-            }}
-            className="w-full flex items-center space-x-4 px-4 py-4 text-left bg-green-500 hover:bg-green-600 rounded-2xl transition-all duration-200 text-black font-medium shadow-lg"
-          >
-            <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-              <LogOut className="w-4 h-4 text-white" />
-            </div>
-            <span>Logout</span>
-          </button>
-        </footer>
-      </aside>
+      <footer className="mt-auto p-4 border-t border-gray-700/50">
+        <button
+          onClick={() => {
+            disconnectWallet(); 
+            onClose();
+          }}
+          className="w-full flex items-center space-x-4 px-4 py-4 text-left bg-green-500 hover:bg-green-600 rounded-2xl transition-all duration-200 text-black font-medium shadow-lg"
+        >
+          <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+            <LogOut className="w-4 h-4 text-white" />
+          </div>
+          <span>Logout</span>
+        </button>
+      </footer>
+    </aside>
     </div>
   );
 }

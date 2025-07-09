@@ -8,6 +8,7 @@ import Ellipsis from "../assets/Ellipse.png";
 import Token from "../components/token";
 import Ads from "../components/ads";
 import Sidebar from "../components/Sidebar";
+import WalletBalance from "../components/WalletBalance";
 
 const NODE_URL = import.meta.env.VITE_NODE_URL;
 const MODULE_ADDRESS = import.meta.env.VITE_MODULE_ADDRESS;
@@ -17,10 +18,34 @@ export default function Home() {
   const [wallet, setWallet] = useState("");
   const [receiver, setReceiver] = useState("");
   const [amount, setAmount] = useState("");
-  const [mode, setMode] = useState(""); // 'send' | 'receive' | 'scan'
+  const [mode, setMode] = useState(""); 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const canvasRef = useRef(null);
 
+  useEffect(() => {
+    const storedWallet = localStorage.getItem("wallet");
+    const connectedAt = localStorage.getItem("connectedAt");
+
+    if (storedWallet && connectedAt) {
+      const now = Date.now();
+      const diff = now - Number(connectedAt);
+      if (diff < 5 * 60 * 1000) {
+        setWallet(storedWallet);
+
+        setTimeout(() => {
+          setWallet("");
+          localStorage.removeItem("wallet");
+          localStorage.removeItem("connectedAt");
+          // alert("Wallet disconnected after 5 minutes.");
+        }, 5 * 60 * 1000 - diff);
+      } else {
+        localStorage.removeItem("wallet");
+        localStorage.removeItem("connectedAt");
+      }
+    }
+  }, []);
+
+  // Generate QR code
   useEffect(() => {
     if (wallet && canvasRef.current && mode === "receive") {
       QRCode.toCanvas(canvasRef.current, wallet, { width: 180 }, (err) => {
@@ -29,11 +54,37 @@ export default function Home() {
     }
   }, [wallet, mode]);
 
+  // Disconnect wallet if Petra Wallet is connected
+  const disconnectWallet = async () => {
+    setWallet("");
+    localStorage.removeItem("wallet");
+    localStorage.removeItem("connectedAt");
+
+    if (window.aptos?.disconnect) {
+      try {
+        await window.aptos.disconnect(); 
+      } catch (err) {
+        console.warn("Petra disconnect not supported:", err);
+      }
+    }
+  };
+
+
   const connectWallet = async () => {
     if (!window.aptos) return alert("Petra Wallet not found");
+
     try {
       const res = await window.aptos.connect();
       setWallet(res.address);
+      localStorage.setItem("wallet", res.address);
+      localStorage.setItem("connectedAt", Date.now().toString());
+
+      setTimeout(() => {
+        setWallet("");
+        localStorage.removeItem("wallet");
+        localStorage.removeItem("connectedAt");
+        // alert("Wallet disconnected after 5 minutes.");
+      }, 5 * 60 * 1000);
     } catch (e) {
       alert("Failed to connect Petra Wallet");
     }
@@ -52,9 +103,11 @@ export default function Home() {
     try {
       const tx = await window.aptos.signAndSubmitTransaction(payload);
       let confirmed = false;
+
       while (!confirmed) {
         const res = await fetch(`${NODE_URL}/transactions/by_hash/${tx.hash}`);
         const json = await res.json();
+
         if (json.success) {
           alert("APT sent!");
           confirmed = true;
@@ -74,17 +127,14 @@ export default function Home() {
   return (
     <main className="min-h-screen mx-4 p-4 relative overflow-hidden">
       <div className="absolute top-[-6rem]">
-        <img
-          src={Ellipsis}
-          alt="Background decoration"
-          className="w-4xl h-4xl object-contain"
-        />
+        <img src={Ellipsis} alt="Background decoration" className="w-4xl h-4xl object-contain" />
       </div>
 
       <header className="relative flex items-center justify-between mb-8 pt-4">
         <div onClick={() => setIsSidebarOpen(true)} className="cursor-pointer">
-          <UserProfile profileImage={user} />
+          <UserProfile profileImage={user} walletAddress={wallet} />
         </div>
+
         {!wallet ? (
           <button
             onClick={connectWallet}
@@ -99,7 +149,9 @@ export default function Home() {
 
       <section className="relative z-10 flex-col items-center gap-2 text-center mb-4">
         <p>Balance</p>
-        <h1 className="text-4xl">$--.--</h1>
+        <h1 className="text-4xl text-green-400">
+          {wallet ? <WalletBalance address={wallet} /> : "$--.--"}
+        </h1>
       </section>
 
       {wallet && mode === "receive" && (
@@ -153,15 +205,10 @@ export default function Home() {
             <div className="w-20 h-20 bg-gray-800 rounded-lg flex items-center justify-center">
               <QrCode className="w-10 h-10 text-white" />
             </div>
-            {/* Green border corners */}
-            {["top-2", "bottom-2"].map((pos, idx) =>
-              ["left-2", "right-2"].map((side) => (
-                <div
-                  key={`${pos}-${side}`}
-                  className={`absolute -${pos} -${side} w-6 h-6 border-${side.split("-")[0]}-4 border-${pos.split("-")[0]}-4 border-green-500 rounded-${pos.split("-")[0][0]}${side.split("-")[0][0]}-lg`}
-                ></div>
-              ))
-            )}
+            <div className="absolute -top-2 -left-2 w-6 h-6 border-l-4 border-t-4 border-green-500 rounded-tl-lg"></div>
+            <div className="absolute -top-2 -right-2 w-6 h-6 border-r-4 border-t-4 border-green-500 rounded-tr-lg"></div>
+            <div className="absolute -bottom-2 -left-2 w-6 h-6 border-l-4 border-b-4 border-green-500 rounded-bl-lg"></div>
+            <div className="absolute -bottom-2 -right-2 w-6 h-6 border-r-4 border-b-4 border-green-500 rounded-br-lg"></div>
           </div>
           <span className="text-green-500 font-medium">Scan QR</span>
         </div>
@@ -197,6 +244,7 @@ export default function Home() {
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
           walletAddress={wallet}
+          disconnectWallet={disconnectWallet}
         />
       )}
     </main>
