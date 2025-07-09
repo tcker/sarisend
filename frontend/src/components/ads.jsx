@@ -5,7 +5,7 @@ export default function Ads() {
   return (
     <main className='flex items-center justify-between mx-4 mb-5 py-4 bg-green-400 rounded-lg'>
       <span className='flex-col ml-6 text-black'>
-        <p>For you</p>
+        <p className='font-bold'>For you</p>
         <h1 className='text-md'>Enjoy a free transaction for your first pay!</h1>
       </span>
       <div className='relative ml-6 mr-4'>

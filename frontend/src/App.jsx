@@ -7,7 +7,7 @@ import TransHisto from './pages/transHisto'
 import SentConfirm from './pages/sentConfirm'
 import Terms from './pages/terms'
 import About from './pages/about'
-
+import Merchant from './pages/merchant'
 export default function App() {
   return (
     <>
@@ -19,6 +19,7 @@ export default function App() {
         <Route path="/sent-confirm" element={<SentConfirm />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/about" element={<About />} />
+        <Route path="/merchant" element={<Merchant />} />
       </Routes>
     </>
   )
