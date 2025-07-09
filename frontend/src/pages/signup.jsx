@@ -168,7 +168,7 @@ export default function Signup() {
 
                 {/* Continue Button */}
                 <Link
-                  to="/"
+                  to="/Home"
                   className="w-full bg-green-500 hover:bg-green-600 text-black font-medium py-4 px-6 rounded-2xl transition-all duration-200 flex items-center justify-center space-x-2 group"
                 >
                   <span className="text-lg">Continue to Dashboard</span>

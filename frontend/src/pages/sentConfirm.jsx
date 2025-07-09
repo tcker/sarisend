@@ -1,19 +1,55 @@
 import React from 'react'
 import { ArrowLeft, Check, Copy, ExternalLink } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { usePaymentContext } from '../hooks/usePaymentContext.jsx'
 import Homebtn from '../components/homeArrow'
+
 export default function SentConfirm() {
-    //change data to reyal when done
+  const { paymentData } = usePaymentContext()
+  
+  // Format the timestamp for display
+  const formatDate = (timestamp) => {
+    if (!timestamp) return 'N/A'
+    const date = new Date(timestamp)
+    return date.toLocaleDateString('en-US', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit'
+    }) + ' • ' + date.toLocaleTimeString('en-US')
+  }
+
+  // Generate a mock transaction ID
+  const generateTransactionId = () => {
+    return `${Math.floor(Math.random() * 9999).toString().padStart(4, '0')}-${Math.floor(Math.random() * 9999).toString().padStart(4, '0')}-${Math.floor(Math.random() * 9999).toString().padStart(4, '0')}-${Math.floor(Math.random() * 9999).toString().padStart(4, '0')}-${Math.floor(Math.random() * 9999).toString().padStart(4, '0')}`
+  }
+
+  // Generate a mock transaction hash
+  const generateTransactionHash = () => {
+    return '0x' + Math.random().toString(16).substr(2, 40)
+  }
+  
+  // Calculate processing fee (0.1% of amount, minimum 0.0001 APT)
+  const calculateProcessingFee = (amount) => {
+    const fee = amount * 0.001 // 0.1%
+    return Math.max(fee, 0.0001) // Minimum 0.0001 APT
+  }
+
+  const processingFee = calculateProcessingFee(paymentData.amount)
+
   const transactionData = {
-    date: 'Tue, August 08, 2025 • 9:27:53 AM',
-    transactionId: '0237-7746-8981-9028-5626',
+    date: formatDate(paymentData.timestamp),
+    transactionId: generateTransactionId(),
     tokenSent: 'Aptos',
-    customerId: '100200300AAABBBB',
-    customerName: 'John Doe',
-    amount: '90 APT',
-    serviceFee: '10 APT',
-    total: '100 APT',
-    hash: '0xabc123def456ghi789jkl012mno345pqr678stu901vwx234yz'
+    recipientId: paymentData.recipient || '188AAA...BBBB',
+    recipientName: paymentData.recipientName || 'Aptos Merchant',
+    amount: `${paymentData.amount.toFixed(6)} APT`,
+    transactionFee: `${paymentData.gasFee.toFixed(6)} APT`,
+    processingFee: `${processingFee.toFixed(6)} APT`,
+    total: `${paymentData.totalCost.toFixed(6)} APT`,
+    remainingBalance: `${paymentData.remainingBalance.toFixed(6)} APT`,
+    note: paymentData.note || 'No note provided',
+    hash: generateTransactionHash()
   }
 
   const copyToClipboard = (text) => {
@@ -77,15 +113,21 @@ export default function SentConfirm() {
 
           {/* Customer Details */}
           <section className="space-y-3 mb-6">
-            <h3 className="sr-only">Customer Information</h3>
+            <h3 className="sr-only">Recipient Information</h3>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-500">Customer ID</span>
-              <span className="font-mono text-sm">{transactionData.customerId}</span>
+              <span className="text-sm text-gray-500">Recipient ID</span>
+              <span className="font-mono text-sm">{transactionData.recipientId}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-500">Customer Name</span>
-              <span className="font-medium">{transactionData.customerName}</span>
+              <span className="text-sm text-gray-500">Recipient Name</span>
+              <span className="font-medium">{transactionData.recipientName}</span>
             </div>
+            {transactionData.note !== 'No note provided' && (
+              <div className="flex justify-between items-start">
+                <span className="text-sm text-gray-500">Note</span>
+                <span className="font-medium text-right max-w-[60%]">{transactionData.note}</span>
+              </div>
+            )}
           </section>
 
           <hr className="border-gray-200 mb-4" />
@@ -98,13 +140,21 @@ export default function SentConfirm() {
               <span className="font-medium">{transactionData.amount}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-500">Service Fee</span>
-              <span className="font-medium">{transactionData.serviceFee}</span>
+              <span className="text-sm text-gray-500">Transaction Fee</span>
+              <span className="font-medium">{transactionData.transactionFee}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-500">Processing Fee</span>
+              <span className="font-medium">{transactionData.processingFee}</span>
             </div>
             <hr className="border-gray-200" />
             <div className="flex justify-between items-center">
-              <span className="font-semibold">Total</span>
+              <span className="font-semibold">Total Sent</span>
               <span className="font-bold text-lg">{transactionData.total}</span>
+            </div>
+            <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-200">
+              <span className="text-sm text-gray-500">Remaining Balance</span>
+              <span className="font-medium text-green-600">{transactionData.remainingBalance}</span>
             </div>
           </section>
 
@@ -146,7 +196,7 @@ export default function SentConfirm() {
           </button>
 
           <Link 
-            to="/"
+            to="/home"
             className="w-full flex items-center justify-center bg-green-500 hover:bg-green-600 rounded-2xl px-6 py-4 text-black font-medium transition-colors shadow-lg"
           >
             Back to Home

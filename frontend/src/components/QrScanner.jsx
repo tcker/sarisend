@@ -1,19 +1,33 @@
 import { useEffect, useRef } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import { X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 
 const QrScanner = ({ onScan, onClose }) => {
   const scannerRef = useRef(null);
   const qrCodeInstance = useRef(null);
+  const navigate = useNavigate();
 
   const stopScanner = async () => {
     if (qrCodeInstance.current) {
       try {
-        await qrCodeInstance.current.stop();
-        await qrCodeInstance.current.clear();
+        // Check if scanner is running before stopping
+        const state = qrCodeInstance.current.getState();
+        if (state === Html5Qrcode.STATE_SCANNING) {
+          await qrCodeInstance.current.stop();
+        }
+        // Clear the scanner
+        qrCodeInstance.current.clear();
         qrCodeInstance.current = null;
       } catch (e) {
         console.warn("Failed to stop scanner:", e);
+        // Force cleanup even if stop fails
+        try {
+          qrCodeInstance.current = null;
+        } catch (clearError) {
+          console.warn("Failed to clear scanner:", clearError);
+        }
       }
     }
   };
@@ -30,24 +44,45 @@ const QrScanner = ({ onScan, onClose }) => {
           { fps: 10, qrbox: { width: 250, height: 250 } },
           (decodedText) => {
             const raw = decodedText.trim();
-            let address = null;
+            // let address = null;
 
-            if (/^0x[a-fA-F0-9]{32,}$/.test(raw)) address = raw;
+            // Comment out address validation - accept any QR code
+            // if (/^0x[a-fA-F0-9]{32,}$/.test(raw)) address = raw;
 
-            const uriMatch = raw.match(/^aptos:(0x[a-fA-F0-9]{32,})$/);
-            if (uriMatch) address = uriMatch[1];
+            // const uriMatch = raw.match(/^aptos:(0x[a-fA-F0-9]{32,})$/);
+            // if (uriMatch) address = uriMatch[1];
 
-            try {
-              const json = JSON.parse(raw);
-              if (json?.address?.startsWith("0x")) address = json.address;
-            } catch {}
+            // try {
+            //   const json = JSON.parse(raw);
+            //   if (json?.address?.startsWith("0x")) address = json.address;
+            // } catch {}
 
-            if (address) {
-              stopScanner();
-              onScan(address);
-            } else {
-              console.warn("Scanned text is not a valid Aptos address:", raw);
-            }
+            // Navigate to payment page for any scanned QR code
+            // if (address) {
+              stopScanner().then(() => {
+                // Only navigate after scanner is fully stopped
+                navigate('/payment', { 
+                  state: { 
+                    // recipientAddress: address,
+                    scannedData: raw 
+                  } 
+                });
+                onClose(); 
+                if (onScan) onScan(raw); // Pass raw data instead of address
+              }).catch((error) => {
+                console.warn("Error stopping scanner before navigation:", error);
+                // Navigate anyway but log the error
+                navigate('/payment', { 
+                  state: { 
+                    scannedData: raw 
+                  } 
+                });
+                onClose();
+                if (onScan) onScan(raw);
+              });
+            // } else {
+            //   console.warn("Scanned text is not a valid Aptos address:", raw);
+            // }
           },
           (error) => {
             // Optional: handle scan errors
@@ -59,7 +94,13 @@ const QrScanner = ({ onScan, onClose }) => {
     };
 
     startScanner();
-    return () => stopScanner();
+    return () => {
+      // Cleanup function - ensure scanner stops when component unmounts
+      stopScanner().catch((error) => {
+        console.warn("Error stopping scanner on cleanup:", error);
+      });
+    };
+    // AYAW MAG STOP - Fixed with proper async cleanup
   }, [onScan]);
 
   return (
@@ -76,8 +117,8 @@ const QrScanner = ({ onScan, onClose }) => {
       </div>
 
       <button
-        onClick={() => {
-          stopScanner();
+        onClick={async () => {
+          await stopScanner();
           onClose();
         }}
         className="absolute top-4 right-4 z-50 bg-black bg-opacity-50 hover:bg-opacity-80 text-white p-2 rounded-full"
