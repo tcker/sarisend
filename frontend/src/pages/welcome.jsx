@@ -1,7 +1,210 @@
-import React from 'react'
-
+import React, { useState, useEffect } from 'react'
+import { ChevronRight, ChevronLeft } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import logo from '../assets/logo.png'
+import one from '../assets/hello1.png'
 export default function Welcome() {
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
+
+  const slides = [
+    {
+      id: 0,
+      type: 'intro',
+      title: 'SariSend',
+      description: 'Your crypto wallet for everyday life.',
+      image: logo,
+      showContinue: true
+    },
+    {
+      id: 1,
+      type: 'feature',
+      title: 'Welcome to SariSend —',
+      subtitle: 'your crypto wallet for everyday life.',
+      image: one,
+      showDots: true
+    },
+    {
+      id: 2,
+      type: 'feature', 
+      title: 'From token to tindahan, youre covered',
+      subtitle: "SariSend makes crypto transactions easy and accessible.",
+      image: '/assets/hello2.png',
+      showDots: true
+    },
+    {
+      id: 3,
+      type: 'feature',
+      title: 'Just Scan, Tap, and Enjoy.',
+      subtitle: 'Experience seamless transactions with SariSend.',
+      image: '/assets/hello3.png',
+      showDots: true,
+      isLast: true
+    }
+  ]
+
+  const nextSlide = () => {
+    if (currentSlide < slides.length - 1) {
+      setCurrentSlide(currentSlide + 1)
+    }
+  }
+
+  const prevSlide = () => {
+    if (currentSlide > 0) {
+      setCurrentSlide(currentSlide - 1)
+    }
+  }
+
+  const goToSlide = (index) => {
+    setCurrentSlide(index)
+  }
+
+  // Touch/Swipe handlers
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe && currentSlide < slides.length - 1) {
+      nextSlide()
+    }
+    if (isRightSwipe && currentSlide > 0) {
+      prevSlide()
+    }
+  }
+
+  const currentSlideData = slides[currentSlide]
+
   return (
-    <div>Welcome</div>
+    <main className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white overflow-hidden">
+      <div 
+        className="h-screen flex flex-col"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Slide Content */}
+        <div className="flex-1 flex items-center justify-center px-6 py-8">
+          <div className="max-w-md w-full text-center">
+            
+            {/* Intro Slide (First slide) */}
+            {currentSlideData.type === 'intro' && (
+              <div className="space-y-8">
+                <div className="w-32 h-32 mx-auto bg-gray-800/50 rounded-3xl border border-gray-700/30 flex items-center justify-center mb-8">
+                  <img 
+                    src={currentSlideData.image} 
+                    alt="SariSend Logo"
+                    className="w-16 h-16"
+                  />
+                </div>
+                <div>
+                  <h1 className="text-4xl font-bold mb-2">
+                    Sari<span className="text-green-500">Send</span>
+                  </h1>
+                  <p className="text-gray-400 text-sm mb-2">{currentSlideData.subtitle}</p>
+                  <p className="text-white text-lg">{currentSlideData.description}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Feature Slides */}
+            {currentSlideData.type === 'feature' && (
+              <div className="space-y-8">
+                <div className="w-80 h-64 mx-auto mb-8 flex items-center justify-center">
+                  <img 
+                    src={currentSlideData.image} 
+                    alt={`Feature ${currentSlideData.id}`}
+                    className="max-w-full max-h-full object-contain"
+                  />
+                </div>
+                <div>
+                  <h2 className="text-2xl sm:text-3xl font-bold mb-4 leading-tight">
+                    {currentSlideData.title}
+                  </h2>
+                  <p className="text-xl sm:text-2xl text-gray-300">
+                    {currentSlideData.subtitle}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Navigation Dots (for feature slides) */}
+        {currentSlideData.showDots && (
+          <div className="flex justify-center space-x-2 mb-8">
+            {slides.slice(1).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index + 1)}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  currentSlide === index + 1 ? 'bg-green-500' : 'bg-gray-600'
+                }`}
+                aria-label={`Go to slide ${index + 2}`}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Bottom Navigation */}
+        <div className="px-6 pb-8">
+          <div className="flex items-center justify-between">
+            {/* Back Button */}
+            <button
+              onClick={prevSlide}
+              disabled={currentSlide === 0}
+              className={`p-3 rounded-full transition-all ${
+                currentSlide === 0 
+                  ? 'invisible' 
+                  : 'bg-gray-800/50 hover:bg-gray-700/70 border border-gray-600'
+              }`}
+              aria-label="Previous slide"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+
+            {/* Continue/Next Button */}
+            {currentSlideData.isLast ? (
+              <Link
+                to="/signup"
+                className="bg-green-500 hover:bg-green-600 text-black font-medium px-8 py-4 rounded-full transition-colors shadow-lg flex items-center space-x-2"
+              >
+                <span>Get Started</span>
+                <ChevronRight className="w-5 h-5" />
+              </Link>
+            ) : (
+              <button
+                onClick={nextSlide}
+                className="bg-green-500 hover:bg-green-600 text-black font-medium px-8 py-4 rounded-full transition-colors shadow-lg flex items-center space-x-2"
+              >
+                <span>{currentSlideData.showContinue ? 'Continue' : 'Next'}</span>
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Skip Button (top right) */}
+        {currentSlide > 0 && !currentSlideData.isLast && (
+          <Link
+            to="/signup"
+            className="absolute top-8 right-6 text-gray-400 hover:text-white transition-colors"
+          >
+            Skip
+          </Link>
+        )}
+      </div>
+    </main>
   )
 }

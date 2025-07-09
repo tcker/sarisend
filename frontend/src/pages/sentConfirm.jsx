@@ -23,48 +23,49 @@ export default function SentConfirm() {
   
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white flex items-center justify-center px-4 py-8">
+    <main className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white flex items-center justify-center px-4 py-8">
       <div className="max-w-md w-full">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <header className="flex items-center justify-between mb-8">
          <Homebtn/>
           <h1 className="text-xl font-bold">Transaction Receipt</h1>
-          <div className="w-10"></div> {/* Spacer */}
-        </div>
+          <div className="w-10" aria-hidden="true"></div> {/* Spacer */}
+        </header>
 
         {/* Receipt Card */}
-        <div className="bg-white text-black rounded-t-3xl p-6 shadow-2xl relative">
+        <article className="bg-white text-black rounded-t-3xl p-6 shadow-2xl relative">
           {/* Success Icon */}
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-6" aria-hidden="true">
             <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
               <Check className="w-8 h-8 text-white" />
             </div>
           </div>
 
           {/* Transaction Successful */}
-          <div className="text-center mb-6">
+          <header className="text-center mb-6">
             <h2 className="text-2xl font-bold text-green-600 mb-2">Transaction Successful!</h2>
             <p className="text-gray-600">Your transaction has been completed</p>
-          </div>
+          </header>
 
           {/* Date */}
-          <div className="text-center text-sm text-gray-500 mb-6">
+          <time className="block text-center text-sm text-gray-500 mb-6" dateTime="2025-08-08T09:27:53">
             {transactionData.date}
-          </div>
+          </time>
 
           {/* Transaction ID */}
-          <div className="border-2 border-dashed border-gray-300 rounded-2xl p-4 mb-6 text-center">
-            <p className="text-xs text-gray-500 mb-1">Transaction ID</p>
+          <section className="border-2 border-dashed border-gray-300 rounded-2xl p-4 mb-6 text-center">
+            <h3 className="text-xs text-gray-500 mb-1">Transaction ID</h3>
             <div className="flex items-center justify-center space-x-2">
               <span className="font-mono text-sm">{transactionData.transactionId}</span>
               <button 
                 onClick={() => copyToClipboard(transactionData.transactionId)}
                 className="p-1 hover:bg-gray-100 rounded transition-colors"
+                aria-label="Copy transaction ID"
               >
                 <Copy className="w-4 h-4 text-gray-400" />
               </button>
             </div>
-          </div>
+          </section>
 
           {/* Token Sent */}
           <div className="flex justify-between items-center mb-4">
@@ -75,7 +76,8 @@ export default function SentConfirm() {
           <hr className="border-gray-200 mb-4" />
 
           {/* Customer Details */}
-          <div className="space-y-3 mb-6">
+          <section className="space-y-3 mb-6">
+            <h3 className="sr-only">Customer Information</h3>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-500">Customer ID</span>
               <span className="font-mono text-sm">{transactionData.customerId}</span>
@@ -84,12 +86,13 @@ export default function SentConfirm() {
               <span className="text-sm text-gray-500">Customer Name</span>
               <span className="font-medium">{transactionData.customerName}</span>
             </div>
-          </div>
+          </section>
 
           <hr className="border-gray-200 mb-4" />
 
           {/* Amount Details */}
-          <div className="space-y-3 mb-6">
+          <section className="space-y-3 mb-6">
+            <h3 className="sr-only">Transaction Amount</h3>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-500">Amount</span>
               <span className="font-medium">{transactionData.amount}</span>
@@ -103,18 +106,18 @@ export default function SentConfirm() {
               <span className="font-semibold">Total</span>
               <span className="font-bold text-lg">{transactionData.total}</span>
             </div>
-          </div>
+          </section>
 
           {/* SariSend Branding */}
-          <div className="text-center">
+          <footer className="text-center">
             <h3 className="text-3xl font-bold">
               Sari<span className="text-green-500">Send</span>
             </h3>
-          </div>
-        </div>
+          </footer>
+        </article>
 
         {/* Receipt Bottom with Torn Edge Effect */}
-        <div className="bg-white h-6 relative">
+        <div className="bg-white h-6 relative" aria-hidden="true">
           <div className="absolute inset-0 bg-white" 
                style={{
                  clipPath: 'polygon(0% 0%, 5% 100%, 10% 0%, 15% 100%, 20% 0%, 25% 100%, 30% 0%, 35% 100%, 40% 0%, 45% 100%, 50% 0%, 55% 100%, 60% 0%, 65% 100%, 70% 0%, 75% 100%, 80% 0%, 85% 100%, 90% 0%, 95% 100%, 100% 0%, 100% 100%, 0% 100%)'
@@ -123,17 +126,22 @@ export default function SentConfirm() {
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-8 space-y-4">
+        <nav className="mt-8 space-y-4">
           <button
             onClick={() => copyToClipboard(transactionData.hash)}
             className="w-full flex items-center justify-center space-x-2 bg-gray-800/50 hover:bg-gray-700/70 border border-gray-600 rounded-2xl px-6 py-4 text-white transition-colors"
+            aria-label="Copy transaction hash to clipboard"
           >
-            <Copy className="w-5 h-5" />
+            <Copy className="w-5 h-5" aria-hidden="true" />
             <span>Copy Transaction Hash</span>
           </button>
 
-          <button className="w-full flex items-center justify-center space-x-2 bg-gray-800/50 hover:bg-gray-700/70 border border-gray-600 rounded-2xl px-6 py-4 text-white transition-colors">
-            <ExternalLink className="w-5 h-5" />
+          <button 
+            className="w-full flex items-center justify-center space-x-2 bg-gray-800/50 hover:bg-gray-700/70 border border-gray-600 rounded-2xl px-6 py-4 text-white transition-colors"
+            onClick={() => window.open('#', '_blank')}
+            aria-label="View transaction on blockchain explorer"
+          >
+            <ExternalLink className="w-5 h-5" aria-hidden="true" />
             <span>View on Explorer</span>
           </button>
 
@@ -143,8 +151,8 @@ export default function SentConfirm() {
           >
             Back to Home
           </Link>
-        </div>
+        </nav>
       </div>
-    </div>
+    </main>
   )
 }

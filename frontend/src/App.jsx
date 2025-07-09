@@ -9,7 +9,8 @@ import About from './pages/about'
 
 export default function App() {
   return (
-    <div className="App">      <Routes>
+    <>
+      <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/token-info" element={<TokenInfo />} />
@@ -18,6 +19,6 @@ export default function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/about" element={<About />} />
       </Routes>
-    </div>
+    </>
   )
 }
