@@ -13,8 +13,8 @@ export default function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/welcome" element={<Welcome />} />
+        <Route path="/" element={<Welcome />} />
+        <Route path="/Home" element={<Home />} />
         <Route path="/token-info" element={<TokenInfo />} />
         <Route path="/transaction-history" element={<TransHisto />} />
         <Route path="/sent-confirm" element={<SentConfirm />} />

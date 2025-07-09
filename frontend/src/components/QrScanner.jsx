@@ -1,51 +1,60 @@
 import { useEffect, useRef } from "react";
-import { BrowserQRCodeReader } from "@zxing/browser";
+import { Html5Qrcode } from "html5-qrcode";
 import { X } from "lucide-react";
 
 const QrScanner = ({ onScan, onClose }) => {
-  const videoRef = useRef(null);
-  const codeReader = useRef(null);
+  const scannerRef = useRef(null);
+  const qrCodeInstance = useRef(null);
 
-  const stopScanner = () => {
-    if (videoRef.current?.srcObject) {
-      videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
-      videoRef.current.srcObject = null;
+  const stopScanner = async () => {
+    if (qrCodeInstance.current) {
+      try {
+        await qrCodeInstance.current.stop();
+        await qrCodeInstance.current.clear();
+        qrCodeInstance.current = null;
+      } catch (e) {
+        console.warn("Failed to stop scanner:", e);
+      }
     }
-    codeReader.current?.reset();
   };
 
   useEffect(() => {
     const startScanner = async () => {
+      if (!scannerRef.current) return;
+
+      qrCodeInstance.current = new Html5Qrcode(scannerRef.current.id);
+
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" },
-        });
+        await qrCodeInstance.current.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: { width: 250, height: 250 } },
+          (decodedText) => {
+            const raw = decodedText.trim();
+            let address = null;
 
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          await videoRef.current.play();
-        }
+            if (/^0x[a-fA-F0-9]{32,}$/.test(raw)) address = raw;
 
-        codeReader.current = new BrowserQRCodeReader();
+            const uriMatch = raw.match(/^aptos:(0x[a-fA-F0-9]{32,})$/);
+            if (uriMatch) address = uriMatch[1];
 
-        codeReader.current.decodeFromVideoElementContinuously(
-          videoRef.current,
-          (result) => {
-            if (result) {
-              const rawText = result.getText().trim();
+            try {
+              const json = JSON.parse(raw);
+              if (json?.address?.startsWith("0x")) address = json.address;
+            } catch {}
 
-              // If it starts with 0x and is at least 32 characters, treat it as an Aptos address
-              if (/^0x[a-fA-F0-9]{32,}$/.test(rawText)) {
-                stopScanner();
-                onScan(rawText);
-              } else {
-                console.warn("Scanned QR is not a valid Aptos address:", rawText);
-              }
+            if (address) {
+              stopScanner();
+              onScan(address);
+            } else {
+              console.warn("Scanned text is not a valid Aptos address:", raw);
             }
+          },
+          (error) => {
+            // Optional: handle scan errors
           }
         );
       } catch (err) {
-        console.error("Error accessing camera:", err);
+        console.error("Camera access failed:", err);
       }
     };
 
@@ -55,13 +64,7 @@ const QrScanner = ({ onScan, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black">
-      <video
-        ref={videoRef}
-        className="w-full h-full object-cover"
-        autoPlay
-        muted
-        playsInline
-      />
+      <div id="qr-scanner" ref={scannerRef} className="w-full h-full" />
 
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div className="w-64 h-64 border-4 border-green-500 rounded-lg relative">
