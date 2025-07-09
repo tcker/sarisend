@@ -3,6 +3,8 @@ import { ChevronRight, ChevronLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import logo from '../assets/logo.png'
 import one from '../assets/hello1.png'
+import two from '../assets/hello2.png'
+import three from '../assets/hello3.png'
 export default function Welcome() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
@@ -20,8 +22,8 @@ export default function Welcome() {
     {
       id: 1,
       type: 'feature',
-      title: 'Welcome to SariSend —',
-      subtitle: 'your crypto wallet for everyday life.',
+      title: 'Welcome to SariSend',
+      subtitle: 'Instant Crypto Payments, One Scan Away',
       image: one,
       showDots: true
     },
@@ -30,7 +32,7 @@ export default function Welcome() {
       type: 'feature', 
       title: 'From token to tindahan, youre covered',
       subtitle: "SariSend makes crypto transactions easy and accessible.",
-      image: '/assets/hello2.png',
+      image: two,
       showDots: true
     },
     {
@@ -38,7 +40,7 @@ export default function Welcome() {
       type: 'feature',
       title: 'Just Scan, Tap, and Enjoy.',
       subtitle: 'Experience seamless transactions with SariSend.',
-      image: '/assets/hello3.png',
+      image: three,
       showDots: true,
       isLast: true
     }
@@ -87,7 +89,7 @@ export default function Welcome() {
   const currentSlideData = slides[currentSlide]
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white overflow-hidden">
+    <main className="min-h-screen bg-black text-white overflow-hidden">
       <div 
         className="h-screen flex flex-col"
         onTouchStart={handleTouchStart}
@@ -101,11 +103,10 @@ export default function Welcome() {
             {/* Intro Slide (First slide) */}
             {currentSlideData.type === 'intro' && (
               <div className="space-y-8">
-                <div className="w-32 h-32 mx-auto bg-gray-800/50 rounded-3xl border border-gray-700/30 flex items-center justify-center mb-8">
+                <div className=" flex items-center justify-center mb-6">
                   <img 
                     src={currentSlideData.image} 
                     alt="SariSend Logo"
-                    className="w-16 h-16"
                   />
                 </div>
                 <div>
@@ -120,23 +121,24 @@ export default function Welcome() {
 
             {/* Feature Slides */}
             {currentSlideData.type === 'feature' && (
-              <div className="space-y-8">
-                <div className="w-80 h-64 mx-auto mb-8 flex items-center justify-center">
+              <section className="space-y-8">
+                <div className="w-80 h-64 mx-auto mb-8 flex items-start justify-items-start">
                   <img 
                     src={currentSlideData.image} 
                     alt={`Feature ${currentSlideData.id}`}
                     className="max-w-full max-h-full object-contain"
                   />
                 </div>
-                <div>
-                  <h2 className="text-2xl sm:text-3xl font-bold mb-4 leading-tight">
+
+                <div className='text-left'>
+                  <h2 className="text-5xl font-extrabold mb-4 mr-8 leading-tight">
                     {currentSlideData.title}
                   </h2>
                   <p className="text-xl sm:text-2xl text-gray-300">
                     {currentSlideData.subtitle}
                   </p>
                 </div>
-              </div>
+              </section>
             )}
           </div>
         </div>
@@ -167,7 +169,7 @@ export default function Welcome() {
               className={`p-3 rounded-full transition-all ${
                 currentSlide === 0 
                   ? 'invisible' 
-                  : 'bg-gray-800/50 hover:bg-gray-700/70 border border-gray-600'
+                  : 'bg-black/50 hover:bg-gray-900/70 border border-gray-600'
               }`}
               aria-label="Previous slide"
             >
