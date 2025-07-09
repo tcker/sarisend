@@ -1,59 +1,67 @@
-import { useEffect, useRef } from 'react';
-import { BrowserQRCodeReader } from '@zxing/browser';
+import { useEffect, useRef } from "react";
+import { BrowserQRCodeReader } from "@zxing/browser";
 
-const QrScanner = ({ onScan, onClose }) => {
+const QrScanner = ({ onScan }) => {
   const videoRef = useRef(null);
-  const codeReaderRef = useRef(null);
+  const codeReader = useRef(null);
 
   useEffect(() => {
     const startScanner = async () => {
-      const videoElement = videoRef.current;
-
-      if (!videoElement) return;
-
-      const codeReader = new BrowserQRCodeReader();
-      codeReaderRef.current = codeReader;
-
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-        videoElement.srcObject = stream;
-        videoElement.setAttribute('playsinline', true);
-        await videoElement.play();
-
-        codeReader.decodeFromVideoElement(videoElement, (result, err) => {
-          if (result) {
-            onScan(result.getText());
-            stopScanner();
-          }
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "environment" },
         });
-      } catch (error) {
-        console.error('Camera error:', error);
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          await videoRef.current.play();
+        }
+
+        codeReader.current = new BrowserQRCodeReader();
+        codeReader.current.decodeFromVideoElementContinuously(
+          videoRef.current,
+          (result, error) => {
+            if (result) {
+              onScan(result.getText());
+              stopScanner();
+            }
+          }
+        );
+      } catch (err) {
+        console.error("Error accessing camera:", err);
       }
     };
 
     const stopScanner = () => {
-      const codeReader = codeReaderRef.current;
-      if (codeReader) {
-        codeReader.reset();
+      if (videoRef.current?.srcObject) {
+        videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
       }
-      const videoElement = videoRef.current;
-      if (videoElement?.srcObject) {
-        const tracks = videoElement.srcObject.getTracks();
-        tracks.forEach(track => track.stop());
-      }
+      codeReader.current?.reset();
     };
 
     startScanner();
 
-    return () => {
-      stopScanner();
-    };
+    return () => stopScanner();
   }, [onScan]);
 
   return (
-    <div>
-      <video ref={videoRef} style={{ width: '100%' }} />
-      <button onClick={onClose}>Cancel</button>
+    <div className="fixed inset-0 z-50 bg-black">
+      <video
+        ref={videoRef}
+        className="w-full h-full object-cover"
+        autoPlay
+        muted
+        playsInline
+      />
+
+      {/* FRAME OVERLAY */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="w-64 h-64 border-4 border-green-500 rounded-lg relative">
+          <div className="absolute w-6 h-6 border-t-4 border-l-4 border-green-500 top-0 left-0"></div>
+          <div className="absolute w-6 h-6 border-t-4 border-r-4 border-green-500 top-0 right-0"></div>
+          <div className="absolute w-6 h-6 border-b-4 border-l-4 border-green-500 bottom-0 left-0"></div>
+          <div className="absolute w-6 h-6 border-b-4 border-r-4 border-green-500 bottom-0 right-0"></div>
+        </div>
+      </div>
     </div>
   );
 };

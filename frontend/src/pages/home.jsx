@@ -162,23 +162,12 @@ export default function Home() {
       )}
 
       {mode === "scan" && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center">
-          <div className="relative w-[320px] h-[320px] border-4 border-green-500 rounded-xl overflow-hidden">
-            <QrScanner
-              onScan={(text) => {
-                setReceiver(text);
-                setMode("send");
-              }}
-              onClose={() => setMode("")}
-            />
-            <button
-              onClick={() => setMode("")}
-              className="absolute top-2 right-2 z-10 text-white hover:text-red-500"
-            >
-              <X />
-            </button>
-          </div>
-        </div>
+        <QrScanner
+          onScan={(text) => {
+            setReceiver(text);
+            setMode("send");
+          }}
+        />
       )}
 
       {mode === "send" && (
@@ -264,5 +253,5 @@ export default function Home() {
         />
       )}
     </main>
-  );
+  );    
 }
