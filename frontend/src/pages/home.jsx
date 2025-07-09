@@ -161,15 +161,17 @@ export default function Home() {
         </div>
       )}
 
-      {mode === "scan" && (
-        <QrScanner
-          onScan={(text) => {
-            setReceiver(text);
-            setMode("send");
-          }}
-        />
-      )}
+    {mode === "scan" && (
+      <QrScanner
+        onScan={(text) => {
+          setReceiver(text);
+          setMode("send");
+        }}
+        onClose={() => setMode("")}
+      />
+    )}
 
+      
       {mode === "send" && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center">
           <div className="bg-zinc-900 p-6 rounded-xl border border-gray-900 w-full max-w-xl relative">
