@@ -229,7 +229,7 @@ export default function Signup() {
         </section>
       </div>
 
-      {/* Footer */}git
+      {/* Footer */}
       <footer className="px-6 pb-8">
         <nav
           className="text-center space-y-2"
