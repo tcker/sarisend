@@ -3,35 +3,50 @@ import { useEffect, useState } from "react";
 const NODE_URL = import.meta.env.VITE_NODE_URL;
 
 export default function WalletBalance({ address }) {
-  const [balance, setBalance] = useState(null);
+  const [usdBalance, setUsdBalance] = useState(null);
 
   useEffect(() => {
     if (!address) return;
 
     const fetchBalance = async () => {
       try {
+        console.log("Fetching balance for:", address);
+
+        // Fetch resources from Aptos node
         const res = await fetch(`${NODE_URL}/accounts/${address}/resources`);
         const resources = await res.json();
 
+        // Find APT balance
         const aptosCoinStore = resources.find((r) =>
           r.type.includes("0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>")
         );
 
-        if (aptosCoinStore && aptosCoinStore.data?.coin?.value) {
-          const rawValue = aptosCoinStore.data.coin.value;
-          const apt = parseFloat(rawValue) / 1e8;
-          setBalance(apt.toFixed(4));
-        } else {
-          setBalance("0.0000");
+        if (!aptosCoinStore) {
+          setUsdBalance("0.00");
+          return;
         }
+
+        const rawValue = aptosCoinStore.data.coin.value;
+        const aptAmount = parseFloat(rawValue) / 1e8;
+
+        // Fetch APT-USD price from CoinGecko
+        const priceRes = await fetch(
+          "https://api.coingecko.com/api/v3/simple/price?ids=aptos&vs_currencies=usd"
+        );
+        const priceData = await priceRes.json();
+        const aptToUsd = priceData.aptos.usd;
+
+        // Convert to USD
+        const usd = aptAmount * aptToUsd;
+        setUsdBalance(usd.toFixed(2));
       } catch (err) {
-        console.error("Failed to fetch balance:", err);
-        setBalance("0.0000");
+        console.error("Failed to fetch USD balance:", err);
+        setUsdBalance("0.00");
       }
     };
 
     fetchBalance();
   }, [address]);
 
-  return <span>{balance !== null ? `${balance}` : "Loading..."}</span>;
+  return <span>{usdBalance !== null ? `$${usdBalance}` : "Loading..."}</span>;
 }
