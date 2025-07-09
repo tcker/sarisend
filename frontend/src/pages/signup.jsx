@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { QrCode, Wallet } from "lucide-react";
-import { Link } from "react-router-dom";
+import { QrCode, Wallet, User, Store } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import petra from '../assets/petra.png'; 
 import google from '../assets/GoogleIcon.webp'
+
 export default function Signup() {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+  const [userType, setUserType] = useState(null); // null, 'customer', 'merchant'
+  const navigate = useNavigate();
 
   const handlePetraConnect = async () => {
     setIsConnecting(true);
@@ -15,6 +18,13 @@ export default function Signup() {
       setIsConnected(true);
       console.log("Connecting to Petra wallet...");
     }, 2000);
+  };
+
+  const handleUserTypeSelection = (type) => {
+    setUserType(type);
+    if (type === 'merchant') {
+      navigate('/merchant-questionnaire');
+    }
   };
 
   return (
@@ -75,66 +85,122 @@ export default function Signup() {
 
             {!isConnected ? (
               <>
-                {/* Petra Wallet Button */}
-                <button
-                  onClick={handlePetraConnect}
-                  disabled={isConnecting}
-                  className="w-full bg-green-500 hover:bg-green-600 disabled:bg-green-500/50 text-black font-medium py-4 px-6 rounded-2xl transition-all duration-200 flex items-center justify-between group"
-                  aria-describedby="petra-wallet-description"
-                >
-                  <div className="flex items-center space-x-3">
-                    <span
-                      className="w-8 h-8 rounded-lg flex items-center justify-center"
-                      aria-hidden="true"
-                    >
-                        <img src={petra} alt="" className="rounded-full"/>
-                    </span>
-                    <span className="text-lg">
-                      {isConnecting ? "Connecting..." : "Petra Wallet"}
-                    </span>
-                  </div>
+                {/* User Type Selection - Show first */}
+                {userType === null && (
+                  <>
+                    <div className="text-center space-y-4">
+                      <h3 className="text-lg font-semibold text-white mb-4">
+                        I am a...
+                      </h3>
+                      
+                      {/* Customer Button */}
+                      <button
+                        onClick={() => handleUserTypeSelection('customer')}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-4 px-6 rounded-2xl transition-all duration-200 flex items-center justify-between group"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                            <User className="w-5 h-5 text-white" />
+                          </div>
+                          <span className="text-lg">Customer</span>
+                        </div>
+                        <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                          <span className="text-white text-sm">→</span>
+                        </div>
+                      </button>
 
-                  {isConnecting ? (
-                    <div
-                      className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin"
-                      aria-label="Loading"
-                    ></div>
-                  ) : (
-                    <div
-                      className="w-6 h-6 bg-black/20 rounded-full flex items-center justify-center group-hover:bg-black/30 transition-colors"
-                      aria-hidden="true"
-                    >
-                      <span className="text-black text-sm">→</span>
+                      {/* Merchant Button */}
+                      <button
+                        onClick={() => handleUserTypeSelection('merchant')}
+                        className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-4 px-6 rounded-2xl transition-all duration-200 flex items-center justify-between group"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                            <Store className="w-5 h-5 text-white" />
+                          </div>
+                          <span className="text-lg">Merchant</span>
+                        </div>
+                        <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                          <span className="text-white text-sm">→</span>
+                        </div>
+                      </button>
                     </div>
-                  )}
-                </button>
+                  </>
+                )}
 
-                {/* Divider */}
-                <section
-                  className="relative"
-                  role="separator"
-                  aria-label="Alternative connection method"
-                >
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-700"></div>
-                  </div>
-
-                  <div className="relative flex justify-center text-xs">
-                    <span className="bg-black px-3 text-gray-500">
-                      or Login with Google
-                    </span>
-                  </div>
-                </section>
-
-                {/* Alternative Connection Info */}
-                <aside className="text-center space-y-3">
-                    <button className="w-full bg-white text-black font-medium py-4 px-6 rounded-2xl transition-all duration-200 flex items-center gap-3 group">
-                    <span>
-                        <img src={google} alt="Google Icon" className="w-8 h-8 mx-auto mb-2" />
-                    </span>
-                        Sign in with Google
+                {/* Wallet Connection - Show after user type selection for customers */}
+                {userType === 'customer' && (
+                  <>
+                    {/* Back Button */}
+                    <button
+                      onClick={() => setUserType(null)}
+                      className="w-full text-gray-400 hover:text-white text-sm py-2 transition-colors"
+                    >
+                      ← Back to user type selection
                     </button>
-                </aside>
+
+                    {/* Petra Wallet Button */}
+                    <button
+                      onClick={handlePetraConnect}
+                      disabled={isConnecting}
+                      className="w-full bg-green-500 hover:bg-green-600 disabled:bg-green-500/50 text-black font-medium py-4 px-6 rounded-2xl transition-all duration-200 flex items-center justify-between group"
+                      aria-describedby="petra-wallet-description"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <span
+                          className="w-8 h-8 rounded-lg flex items-center justify-center"
+                          aria-hidden="true"
+                        >
+                            <img src={petra} alt="" className="rounded-full"/>
+                        </span>
+                        <span className="text-lg">
+                          {isConnecting ? "Connecting..." : "Petra Wallet"}
+                        </span>
+                      </div>
+
+                      {isConnecting ? (
+                        <div
+                          className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin"
+                          aria-label="Loading"
+                        ></div>
+                      ) : (
+                        <div
+                          className="w-6 h-6 bg-black/20 rounded-full flex items-center justify-center group-hover:bg-black/30 transition-colors"
+                          aria-hidden="true"
+                        >
+                          <span className="text-black text-sm">→</span>
+                        </div>
+                      )}
+                    </button>
+
+                    {/* Divider */}
+                    <section
+                      className="relative"
+                      role="separator"
+                      aria-label="Alternative connection method"
+                    >
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-700"></div>
+                      </div>
+
+                      <div className="relative flex justify-center text-xs">
+                        <span className="bg-black px-3 text-gray-500">
+                          or Login with Google
+                        </span>
+                      </div>
+                    </section>
+
+                    {/* Alternative Connection Info */}
+                    <aside className="text-center space-y-3">
+                        <button className="w-full bg-white text-black font-medium py-4 px-6 rounded-2xl transition-all duration-200 flex items-center gap-3 group">
+                        <span>
+                            <img src={google} alt="Google Icon" className="w-8 h-8 mx-auto mb-2" />
+                        </span>
+                            Sign in with Google
+                        </button>
+                    </aside>
+                  </>
+                )}
               </>
             ) : (
               <div className="text-center space-y-6">

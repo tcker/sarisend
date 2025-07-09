@@ -12,8 +12,10 @@ export default function Payment() {
   const navigate = useNavigate()
   const { updatePaymentData } = usePaymentContext()
   
-  // User's total balance
   const totalBalance = 2847.92
+  
+  // APT to USD conversion rate (in a real app, this would come from an API)
+  const aptToUsdRate = 8.45 // Example: 1 APT = $8.45 USD
   
   // Calculate gas fee (0.5% of amount, minimum 0.001 APT)
   const calculateGasFee = (paymentAmount) => {
@@ -25,9 +27,13 @@ export default function Payment() {
   const currentAmount = parseFloat(amount) || 0
   const gasFee = calculateGasFee(currentAmount)
   const totalCost = currentAmount + gasFee
-  const maxSendableAmount = totalBalance - 0.001 // Reserve minimum gas fee
+  const maxSendableAmount = totalBalance - 0.001 
+  
+  // Calculate USD values
+  const usdAmount = currentAmount * aptToUsdRate
+  const usdTotalCost = totalCost * aptToUsdRate
+  const usdBalance = totalBalance * aptToUsdRate
 
-  // Get scanned data from QR scanner if available
   useEffect(() => {
     if (location.state?.scannedData) {
       // You can parse the scanned data here if it contains recipient info
@@ -121,7 +127,7 @@ export default function Payment() {
                 value={amount}
                 onChange={(e) => handleAmountChange(e.target.value)}
                 placeholder="0"
-                className="w-full bg-transparent text-4xl font-bold text-white text-center border-2 border-blue-500 rounded-2xl py-6 px-4 focus:outline-none focus:border-purple-500 transition-colors pr-20"
+                className="w-full bg-transparent text-4xl font-bold text-white text-center border-2 border-blue-500 rounded-2xl py-8 px-6 focus:outline-none focus:border-purple-500 transition-colors pr-24 pb-16"
               />
               
               {/* Max Button */}
@@ -133,8 +139,15 @@ export default function Payment() {
               </button>
               
               {/* Amount Label and Gas Fee */}
-              <div className="absolute inset-x-0 bottom-2 flex justify-between items-center px-4">
-                <p className="text-gray-400 text-sm">Enter Amount (APT)</p>
+              <div className="absolute inset-x-0 bottom-3 flex justify-between items-center px-6">
+                <div className="text-left">
+                  <p className="text-gray-400 text-sm">Enter Amount (APT)</p>
+                  {currentAmount > 0 && (
+                    <p className="text-blue-400 text-xs">
+                      ≈ ${usdAmount.toFixed(2)} USD
+                    </p>
+                  )}
+                </div>
                 {currentAmount > 0 && (
                   <p className="text-yellow-400 text-xs">
                     Transaction: {gasFee.toFixed(6)} APT
@@ -148,15 +161,24 @@ export default function Payment() {
               <div className="bg-gray-800/30 border border-gray-700/50 rounded-lg p-3">
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-gray-400">Amount:</span>
-                  <span className="text-white">{currentAmount.toFixed(6)} APT</span>
+                  <div className="text-right">
+                    <span className="text-white">{currentAmount.toFixed(6)} APT</span>
+                    <div className="text-blue-400 text-xs">≈ ${usdAmount.toFixed(2)} USD</div>
+                  </div>
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-gray-400">Transaction Fee (0.5%):</span>
-                  <span className="text-yellow-400">+{gasFee.toFixed(6)} APT</span>
+                  <div className="text-right">
+                    <span className="text-yellow-400">+{gasFee.toFixed(6)} APT</span>
+                    <div className="text-yellow-300 text-xs">≈ ${(gasFee * aptToUsdRate).toFixed(4)} USD</div>
+                  </div>
                 </div>
                 <div className="border-t border-gray-600 mt-2 pt-2 flex justify-between items-center font-medium">
                   <span className="text-white">Total Cost:</span>
-                  <span className="text-green-400">{totalCost.toFixed(6)} APT</span>
+                  <div className="text-right">
+                    <span className="text-green-400">{totalCost.toFixed(6)} APT</span>
+                    <div className="text-green-300 text-xs">≈ ${usdTotalCost.toFixed(2)} USD</div>
+                  </div>
                 </div>
               </div>
             )}
@@ -181,7 +203,10 @@ export default function Payment() {
         <section className="bg-gray-800/30 border border-gray-700/50 rounded-xl p-4">
           <div className="flex justify-between items-center">
             <span className="text-gray-400 text-sm">Available Balance</span>
-            <span className="text-white font-medium">{totalBalance.toFixed(2)} APT</span>
+            <div className="text-right">
+              <span className="text-white font-medium">{totalBalance.toFixed(2)} APT</span>
+              <div className="text-blue-400 text-xs">≈ ${usdBalance.toFixed(2)} USD</div>
+            </div>
           </div>
           {isInsufficientBalance && (
             <div className="mt-2 text-red-400 text-xs">
@@ -204,9 +229,11 @@ export default function Payment() {
           <p className="text-xs text-gray-500">
             🔒 Your transaction is secured with end-to-end encryption
           </p>
-          <p className="text-xs text-gray-500">
-            Max sendable: {maxSendableAmount.toFixed(6)} APT (after gas)
-          </p>
+          <div className="flex justify-center space-x-4 text-xs text-gray-500">
+            <span>Max sendable: {maxSendableAmount.toFixed(6)} APT</span>
+            <span>•</span>
+            <span>1 APT = ${aptToUsdRate.toFixed(2)} USD</span>
+          </div>
         </div>
       </div>
     </main>

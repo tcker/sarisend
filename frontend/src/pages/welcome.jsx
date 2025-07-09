@@ -5,6 +5,8 @@ import logo from '../assets/logo.png'
 import one from '../assets/hello1.png'
 import two from '../assets/hello2.png'
 import three from '../assets/hello3.png'
+
+
 export default function Welcome() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
@@ -42,8 +44,8 @@ export default function Welcome() {
       subtitle: 'Experience seamless transactions with SariSend.',
       image: three,
       showDots: true,
-      isLast: true
-    }
+      showContinue: true
+    },
   ]
 
   const nextSlide = () => {

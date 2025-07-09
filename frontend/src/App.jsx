@@ -11,6 +11,7 @@ import About from './pages/about'
 import Merchant from './pages/merchant'
 import Signup from './pages/signup'
 import Payment from './pages/payment'
+import MerchantQuestionnaire from './pages/merchantQuestionnaire'
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/merchant" element={<Merchant />} />
         <Route path='/signup' element={<Signup />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/merchant-questionnaire" element={<MerchantQuestionnaire />} />
       </Routes>
     </PaymentProvider>
   )
