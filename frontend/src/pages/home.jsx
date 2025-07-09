@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { QrCode, Send, Download } from "lucide-react";
+import { QrCode, Send, Download, X } from "lucide-react";
 import UserProfile from "../components/icon";
 import QrScanner from "../components/QrScanner";
 import QRCode from "qrcode";
@@ -36,7 +36,6 @@ export default function Home() {
           setWallet("");
           localStorage.removeItem("wallet");
           localStorage.removeItem("connectedAt");
-          // alert("Wallet disconnected after 5 minutes.");
         }, 5 * 60 * 1000 - diff);
       } else {
         localStorage.removeItem("wallet");
@@ -45,7 +44,6 @@ export default function Home() {
     }
   }, []);
 
-  // Generate QR code
   useEffect(() => {
     if (wallet && canvasRef.current && mode === "receive") {
       QRCode.toCanvas(canvasRef.current, wallet, { width: 180 }, (err) => {
@@ -54,7 +52,6 @@ export default function Home() {
     }
   }, [wallet, mode]);
 
-  // Disconnect wallet if Petra Wallet is connected
   const disconnectWallet = async () => {
     setWallet("");
     localStorage.removeItem("wallet");
@@ -69,7 +66,6 @@ export default function Home() {
     }
   };
 
-
   const connectWallet = async () => {
     if (!window.aptos) return alert("Petra Wallet not found");
 
@@ -83,7 +79,6 @@ export default function Home() {
         setWallet("");
         localStorage.removeItem("wallet");
         localStorage.removeItem("connectedAt");
-        // alert("Wallet disconnected after 5 minutes.");
       }, 5 * 60 * 1000);
     } catch (e) {
       alert("Failed to connect Petra Wallet");
@@ -147,53 +142,74 @@ export default function Home() {
         )}
       </header>
 
-      <section className="relative z-10 flex-col items-center gap-2 text-center mb-4">
+      <section className="relative z-10 flex-col items-center gap-2 mb-4">
         <p>Balance</p>
         <h1 className="text-4xl text-green-400">
           {wallet ? <WalletBalance address={wallet} /> : "$--.--"}
         </h1>
       </section>
 
-      {wallet && mode === "receive" && (
-        <section className="relative z-10 flex flex-col items-center mb-4">
-          <canvas ref={canvasRef} className="mb-2" />
-          <span className="text-green-500 font-medium">Your Wallet QR</span>
-        </section>
+      {mode === "receive" && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center">
+          <div className="bg-zinc-900 p-6 rounded-xl border border-gray-700 w-full max-w-xs relative">
+            <button onClick={() => setMode("")} className="absolute top-2 right-2 text-gray-300 hover:text-white">
+              <X />
+            </button>
+            <canvas ref={canvasRef} className="mx-auto mb-4" />
+            <p className="text-center text-green-500 font-medium">Your Wallet QR</p>
+          </div>
+        </div>
       )}
 
-      {wallet && mode === "scan" && (
-        <QrScanner
-          onScan={(text) => {
-            setReceiver(text);
-            setMode("send");
-          }}
-          onClose={() => setMode("")}
-        />
+      {mode === "scan" && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center">
+          <div className="relative w-[320px] h-[320px] border-4 border-green-500 rounded-xl overflow-hidden">
+            <QrScanner
+              onScan={(text) => {
+                setReceiver(text);
+                setMode("send");
+              }}
+              onClose={() => setMode("")}
+            />
+            <button
+              onClick={() => setMode("")}
+              className="absolute top-2 right-2 z-10 text-white hover:text-red-500"
+            >
+              <X />
+            </button>
+          </div>
+        </div>
       )}
 
-      {wallet && mode === "send" && (
-        <section className="relative z-10 mb-6">
-          <input
-            className="w-full mb-2 p-2 border border-gray-500 rounded bg-black text-white"
-            type="text"
-            placeholder="Receiver Address"
-            value={receiver}
-            onChange={(e) => setReceiver(e.target.value)}
-          />
-          <input
-            className="w-full mb-2 p-2 border border-gray-500 rounded bg-black text-white"
-            type="number"
-            placeholder="Amount in octas (1 APT = 100000000)"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-          />
-          <button
-            onClick={sendAPT}
-            className="bg-green-500 w-full py-2 rounded text-black font-semibold"
-          >
-            Send APT
-          </button>
-        </section>
+      {mode === "send" && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center">
+          <div className="bg-zinc-900 p-6 rounded-xl border border-gray-700 w-full max-w-sm relative">
+            <button onClick={() => setMode("")} className="absolute top-2 right-2 text-gray-300 hover:text-white">
+              <X />
+            </button>
+            <h2 className="text-lg font-semibold text-green-500 mb-4">Send APT</h2>
+            <input
+              className="w-full mb-2 p-2 border border-gray-500 rounded bg-black text-white"
+              type="text"
+              placeholder="Receiver Address"
+              value={receiver}
+              onChange={(e) => setReceiver(e.target.value)}
+            />
+            <input
+              className="w-full mb-4 p-2 border border-gray-500 rounded bg-black text-white"
+              type="number"
+              placeholder="Amount in octas (1 APT = 100000000)"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+            <button
+              onClick={sendAPT}
+              className="bg-green-500 w-full py-2 rounded text-black font-semibold"
+            >
+              Send APT
+            </button>
+          </div>
+        </div>
       )}
 
       <section className="relative z-10 bg-gradient-to-b from-[#FFFDFD]/40 via-[#FFFDFD]/20 to-[#FFFFFF]/0 backdrop-blur-sm border border-gray-600 rounded-2xl p-8 mb-6 mt-10">
