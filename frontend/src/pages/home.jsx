@@ -149,19 +149,7 @@ export default function Home() {
         </h1>
       </section>
 
-      {mode === "receive" && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center">
-          <div className="bg-zinc-900 p-6 rounded-xl border border-gray-700 w-full max-w-lg relative">
-            <button onClick={() => setMode("")} className="absolute top-2 right-2 text-gray-300 hover:text-white">
-              <X />
-            </button>
-            <canvas ref={canvasRef} className="mx-auto mb-4" />
-            <p className="text-center text-green-500 font-medium">Your Wallet QR</p>
-          </div>
-        </div>
-      )}
-
-    {mode === "scan" && (
+          {mode === "scan" && (
       <QrScanner
         onScan={(text) => {
           setReceiver(text);
@@ -171,45 +159,13 @@ export default function Home() {
       />
     )}
 
-      
-      {mode === "send" && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center">
-          <div className="bg-zinc-900 p-6 rounded-xl border border-gray-900 w-full max-w-xl relative">
-            <button onClick={() => setMode("")} className="absolute top-2 right-2 text-gray-300 hover:text-white">
-              <X />
-            </button>
-            <h2 className="text-lg font-semibold text-green-500 mb-4">Send APT</h2>
-            <input
-              className="w-full mb-2 p-2 border border-gray-500 rounded bg-black text-white"
-              type="text"
-              placeholder="Receiver Address"
-              value={receiver}
-              onChange={(e) => setReceiver(e.target.value)}
-            />
-            <input
-              className="w-full mb-4 p-2 border border-gray-500 rounded bg-black text-white"
-              type="number"
-              placeholder="Amount in octas (1 APT = 100000000)"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-            <button
-              onClick={sendAPT}
-              className="bg-green-500 w-full py-2 rounded text-black font-semibold"
-            >
-              Send APT
-            </button>
-          </div>
-        </div>
-      )}
-
       <section className="relative z-10 bg-gradient-to-b from-[#FFFDFD]/40 via-[#FFFDFD]/20 to-[#FFFFFF]/0 backdrop-blur-sm border border-gray-600 rounded-2xl p-8 mb-6 mt-10">
         <div
           className="flex flex-col items-center cursor-pointer"
           onClick={() => setMode("scan")}
         >
           <div className="relative mb-4">
-            <div className="w-20 h-20 bg-gray-800 rounded-lg flex items-center justify-center">
+            <div className="w-30 h-30 bg-gray-800 rounded-lg flex items-center justify-center">
               <QrCode className="w-10 h-10 text-white" />
             </div>
             <div className="absolute -top-2 -left-2 w-6 h-6 border-l-4 border-t-4 border-green-500 rounded-tl-lg"></div>
@@ -221,7 +177,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative z-10 flex space-x-4 mb-8">
+      {/* <section className="relative z-10 flex space-x-4 mb-8">
         <button
           onClick={() => setMode("send")}
           className="flex-1 bg-gradient-to-b from-[#FFFDFD]/40 via-[#FFFDFD]/20 to-[#FFFFFF]/0 backdrop-blur-sm border border-gray-600 rounded-2xl p-6 flex flex-col items-center space-y-2 hover:bg-gray-600/50 transition-colors"
@@ -232,7 +188,7 @@ export default function Home() {
           <span className="text-green-500 font-medium">Send</span>
         </button>
 
-        <button
+        {/* <button
           onClick={() => setMode("receive")}
           className="flex-1 bg-gradient-to-b from-[#FFFDFD]/40 via-[#FFFDFD]/20 to-[#FFFFFF]/0 backdrop-blur-sm border border-gray-600 rounded-2xl p-6 flex flex-col items-center space-y-2 hover:bg-gray-600/50 transition-colors"
         >
@@ -241,7 +197,7 @@ export default function Home() {
           </div>
           <span className="text-green-500 font-medium">Receive</span>
         </button>
-      </section>
+      </section> */}
 
       <Ads />
       <Token />
