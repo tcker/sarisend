@@ -4,6 +4,8 @@ import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 
+
+
 const QrScanner = ({ onScan, onClose }) => {
   const scannerRef = useRef(null);
   const qrCodeInstance = useRef(null);
@@ -18,7 +20,7 @@ const QrScanner = ({ onScan, onClose }) => {
           await qrCodeInstance.current.stop();
         }
         // Clear the scanner
-        qrCodeInstance.current.clear();
+        await qrCodeInstance.current.clear();
         qrCodeInstance.current = null;
       } catch (e) {
         console.warn("Failed to stop scanner:", e);
@@ -59,27 +61,15 @@ const QrScanner = ({ onScan, onClose }) => {
 
             // Navigate to payment page for any scanned QR code
             // if (address) {
-              stopScanner().then(() => {
-                // Only navigate after scanner is fully stopped
-                navigate('/payment', { 
-                  state: { 
-                    // recipientAddress: address,
-                    scannedData: raw 
-                  } 
-                });
-                onClose(); 
-                if (onScan) onScan(raw); // Pass raw data instead of address
-              }).catch((error) => {
-                console.warn("Error stopping scanner before navigation:", error);
-                // Navigate anyway but log the error
-                navigate('/payment', { 
-                  state: { 
-                    scannedData: raw 
-                  } 
-                });
-                onClose();
-                if (onScan) onScan(raw);
+              stopScanner();
+              navigate('/payment', { 
+                state: { 
+                  // recipientAddress: address,
+                  scannedData: raw 
+                } 
               });
+              onClose(); 
+              if (onScan) onScan(raw); // Pass raw data instead of address
             // } else {
             //   console.warn("Scanned text is not a valid Aptos address:", raw);
             // }
@@ -94,13 +84,8 @@ const QrScanner = ({ onScan, onClose }) => {
     };
 
     startScanner();
-    return () => {
-      // Cleanup function - ensure scanner stops when component unmounts
-      stopScanner().catch((error) => {
-        console.warn("Error stopping scanner on cleanup:", error);
-      });
-    };
-    // AYAW MAG STOP - Fixed with proper async cleanup
+    return () => stopScanner();  
+    // AYAW MAG STOP
   }, [onScan]);
 
   return (
@@ -117,8 +102,8 @@ const QrScanner = ({ onScan, onClose }) => {
       </div>
 
       <button
-        onClick={async () => {
-          await stopScanner();
+        onClick={() => {
+          stopScanner();
           onClose();
         }}
         className="absolute top-4 right-4 z-50 bg-black bg-opacity-50 hover:bg-opacity-80 text-white p-2 rounded-full"

@@ -13,7 +13,12 @@ export function PaymentProvider({ children }) {
     gasFee: 0,
     totalCost: 0,
     remainingBalance: 0,
-    timestamp: null
+    timestamp: null,
+    // Additional merchant data
+    customerId: '',
+    customerName: '',
+    product: '',
+    merchantId: ''
   })
 
   const updatePaymentData = (data) => {
@@ -29,7 +34,12 @@ export function PaymentProvider({ children }) {
       gasFee: 0,
       totalCost: 0,
       remainingBalance: 0,
-      timestamp: null
+      timestamp: null,
+      // Additional merchant data
+      customerId: '',
+      customerName: '',
+      product: '',
+      merchantId: ''
     })
   }
 

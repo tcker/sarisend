@@ -9,9 +9,14 @@ export default function Sidebar({
   walletAddress = "",
   disconnectWallet,
   profileImage = user,
+  isMerchant = false, // New prop to determine if user is merchant
 }) {
   const menuItems = [
-    { icon: History, label: "Transaction History", to: "/transaction-history" },
+    { 
+      icon: History, 
+      label: "Transaction History", 
+      to: isMerchant ? "/merchant-transaction-history" : "/transaction-history" 
+    },
     { icon: FileText, label: "Terms and Conditions", to: "/terms" },
     { icon: Info, label: "About", to: "/about" },
   ];

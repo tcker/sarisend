@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Line } from 'react-chartjs-2'
 import UserProfile from '../components/icon'
+import Sidebar from '../components/Sidebar'
 import user from '../assets/userPfp.jpg'
 import Ellipsis from '../assets/Ellipse.png'
 import Ads from '../components/ads'
@@ -29,7 +30,21 @@ ChartJS.register(
 export default function Merchant() {
   const [timeframe, setTimeframe] = useState('7d')
   const [revenueData, setRevenueData] = useState({})
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
+  const walletAddress = "0x1234567890abcdef1234567890abcdef12345678"
+
+  useEffect(() => {
+    const reloadKey = 'merchantReloaded'
+    
+    if (!window.name.includes(reloadKey)) {
+      window.name += reloadKey
+      window.location.reload()
+    } else {
+      console.log('Merchant page - Already reloaded, skipping')
+    }
+  }, [])
+    
   // Dummy Aptos merchant stats
   const stats = {
     totalRevenue: '2,847.92 APT',
@@ -269,6 +284,16 @@ export default function Merchant() {
           <Ads />
       </div>
     <Token />
+    
+    {/* Sidebar */}
+    <Sidebar
+      isOpen={isSidebarOpen}
+      onClose={() => setIsSidebarOpen(false)}
+      walletAddress={walletAddress}
+      disconnectWallet={() => console.log('Disconnecting wallet...')}
+      profileImage={user}
+      isMerchant={true} // Important: Set to true for merchant mode
+    />
     </main>
   )
 }

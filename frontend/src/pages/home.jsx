@@ -189,6 +189,7 @@ export default function Home() {
           onClose={() => setIsSidebarOpen(false)}
           walletAddress={wallet}
           disconnectWallet={disconnectWallet}
+          isMerchant={false} // Regular user, not merchant
         />
       )}
     </main>

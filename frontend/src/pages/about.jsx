@@ -9,7 +9,7 @@ export default function About() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <Link 
-            to="/" 
+            to="/Home" 
             className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
