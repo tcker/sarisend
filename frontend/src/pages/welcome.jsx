@@ -32,7 +32,7 @@ export default function Welcome() {
     {
       id: 2,
       type: 'feature', 
-      title: 'From token to tindahan, youre covered',
+      title: "From token to Sari-Sari Store, you're covered",
       subtitle: "SariSend makes crypto transactions easy and accessible.",
       image: two,
       showDots: true
