@@ -86,39 +86,39 @@ export default function Home() {
   //   }
   // };
 
-  const sendAPT = async () => {
-    if (!receiver || !amount) return alert("Missing receiver or amount");
+  // const sendAPT = async () => {
+  //   if (!receiver || !amount) return alert("Missing receiver or amount");
 
-    const payload = {
-      type: "entry_function_payload",
-      function: FUNCTION_NAME,
-      arguments: [receiver, amount],
-      type_arguments: [],
-    };
+  //   const payload = {
+  //     type: "entry_function_payload",
+  //     function: FUNCTION_NAME,
+  //     arguments: [receiver, amount],
+  //     type_arguments: [],
+  //   };
 
-    try {
-      const tx = await window.aptos.signAndSubmitTransaction(payload);
-      let confirmed = false;
+  //   try {
+  //     const tx = await window.aptos.signAndSubmitTransaction(payload);
+  //     let confirmed = false;
 
-      while (!confirmed) {
-        const res = await fetch(`${NODE_URL}/transactions/by_hash/${tx.hash}`);
-        const json = await res.json();
+  //     while (!confirmed) {
+  //       const res = await fetch(`${NODE_URL}/transactions/by_hash/${tx.hash}`);
+  //       const json = await res.json();
 
-        if (json.success) {
-          alert("APT sent!");
-          confirmed = true;
-        } else if (json.vm_status?.includes("aborted") || json.code === 404) {
-          await new Promise((r) => setTimeout(r, 1500));
-        } else {
-          alert("TX failed");
-          break;
-        }
-      }
-    } catch (e) {
-      console.error(e);
-      alert("Transaction failed");
-    }
-  };
+  //       if (json.success) {
+  //         alert("APT sent!");
+  //         confirmed = true;
+  //       } else if (json.vm_status?.includes("aborted") || json.code === 404) {
+  //         await new Promise((r) => setTimeout(r, 1500));
+  //       } else {
+  //         alert("TX failed");
+  //         break;
+  //       }
+  //     }
+  //   } catch (e) {
+  //     console.error(e);
+  //     alert("Transaction failed");
+  //   }
+  // };
 
   return (
     <main className="min-h-screen mx-4 p-4 relative overflow-hidden">

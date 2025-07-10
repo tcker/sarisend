@@ -36,12 +36,16 @@ export default function SentConfirm() {
 
   const processingFee = calculateProcessingFee(paymentData.amount)
 
+  const formatRecipientId = (id) => {
+    if (!id) return '';
+    return id.length > 10 ? `${id.slice(0, 6)}...${id.slice(-4)}` : id;
+  }
+
   const transactionData = {
     date: formatDate(paymentData.timestamp),
     transactionId: generateTransactionId(),
     tokenSent: 'Aptos',
-    recipientId: paymentData.recipient || '188AAA...BBBB',
-    recipientName: paymentData.recipientName || 'Aptos Merchant',
+    recipientId: formatRecipientId(paymentData.recipient || '188AAA...BBBB'),
     amount: `${paymentData.amount.toFixed(6)} APT`,
     transactionFee: `${paymentData.gasFee.toFixed(6)} APT`,
     processingFee: `${processingFee.toFixed(6)} APT`,
@@ -122,10 +126,10 @@ export default function SentConfirm() {
               <span className="text-sm text-gray-500">Recipient ID</span>
               <span className="font-mono text-sm">{transactionData.recipientId}</span>
             </div>
-            <div className="flex justify-between items-center">
+            {/* <div className="flex justify-between items-center">
               <span className="text-sm text-gray-500">Recipient Name</span>
               <span className="font-medium">{transactionData.recipientName}</span>
-            </div>
+            </div> */}
             {transactionData.note !== 'No note provided' && (
               <div className="flex justify-between items-start">
                 <span className="text-sm text-gray-500">Note</span>

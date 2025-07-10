@@ -3,9 +3,6 @@ import { Html5Qrcode } from "html5-qrcode";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-
-
-
 const QrScanner = ({ onScan, onClose }) => {
   const scannerRef = useRef(null);
   const qrCodeInstance = useRef(null);
@@ -81,7 +78,7 @@ const QrScanner = ({ onScan, onClose }) => {
       } catch (err) {
         console.error("Camera access failed:", err);
       }
-    };
+    };  
 
     startScanner();
     return () => stopScanner();  
