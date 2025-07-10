@@ -1,6 +1,6 @@
+import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useRef } from "react";
 import { X, History, FileText, Info, LogOut } from "lucide-react";
-import { Link } from "react-router-dom";
 import user from "../assets/userPfp.jpg";
 
 export default function Sidebar({
@@ -11,6 +11,8 @@ export default function Sidebar({
   profileImage = user,
   isMerchant = false, // New prop to determine if user is merchant
 }) {
+  const navigate = useNavigate();
+
   const menuItems = [
     { 
       icon: History, 
@@ -99,8 +101,9 @@ export default function Sidebar({
       <footer className="mt-auto p-4 border-t border-gray-700/50">
         <button
           onClick={() => {
-            disconnectWallet(); 
+            disconnectWallet();
             onClose();
+            navigate("/"); // ⬅️ redirect to home page after logout
           }}
           className="w-full flex items-center space-x-4 px-4 py-4 text-left bg-green-500 hover:bg-green-600 rounded-2xl transition-all duration-200 text-black font-medium shadow-lg"
         >
