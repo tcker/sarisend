@@ -2,7 +2,6 @@ import React from 'react'
 import { ArrowLeft, Check, Copy, ExternalLink } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { usePaymentContext } from '../hooks/usePaymentContext.jsx'
-import Homebtn from '../components/homeArrow'
 
 export default function SentConfirm() {
   const { paymentData } = usePaymentContext()
@@ -28,7 +27,7 @@ export default function SentConfirm() {
   const generateTransactionHash = () => {
     return '0x' + Math.random().toString(16).substr(2, 40)
   }
-  
+
   // Calculate processing fee (0.1% of amount, minimum 0.0001 APT)
   const calculateProcessingFee = (amount) => {
     const fee = amount * 0.001 // 0.1%
@@ -63,7 +62,12 @@ export default function SentConfirm() {
       <div className="max-w-md w-full">
         {/* Header */}
         <header className="flex items-center justify-between mb-8">
-         <Homebtn/>
+         <Link 
+           to="/Home" 
+           className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
+         >
+           <ArrowLeft className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-2xl p-2 sm:p-3 text-black" />
+         </Link>
           <h1 className="text-xl font-bold">Transaction Receipt</h1>
           <div className="w-10" aria-hidden="true"></div> {/* Spacer */}
         </header>

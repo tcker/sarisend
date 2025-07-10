@@ -8,23 +8,23 @@ export default function Sidebar({
   onClose,
   walletAddress = "",
   disconnectWallet,
-  profileImage = user,  
+  profileImage = user,
+  isMerchant = false, // New prop to determine if user is merchant
 }) {
   const menuItems = [
-    { icon: History, label: "Transaction History", to: "/transaction-history" },
+    { 
+      icon: History, 
+      label: "Transaction History", 
+      to: isMerchant ? "/merchant-transaction-history" : "/transaction-history" 
+    },
     { icon: FileText, label: "Terms and Conditions", to: "/terms" },
     { icon: Info, label: "About", to: "/about" },
   ];
 
-      const [displayName, setDisplayName] = React.useState("")
-
-      useEffect(() => {
-        if (walletAddress && walletAddress.length >= 10) {
-          setDisplayName(`${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`)
-        } else {
-          setDisplayName("")
-        }
-      }, [walletAddress])
+  const displayName =
+    walletAddress && walletAddress.length >= 10
+      ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+      : "";
 
   const sidebarRef = useRef();
 

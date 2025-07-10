@@ -12,7 +12,7 @@ import Merchant from './pages/merchant'
 import Signup from './pages/signup'
 import Payment from './pages/payment'
 import MerchantQuestionnaire from './pages/merchantQuestionnaire'
-
+import MerchantTransHisto from './pages/merchantTransHisto.jsx'
 export default function App() {
   return (
     <PaymentProvider>
@@ -28,6 +28,7 @@ export default function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/merchant-questionnaire" element={<MerchantQuestionnaire />} />
+        <Route path= "/merchant-transaction-history" element={<MerchantTransHisto />} />
       </Routes>
     </PaymentProvider>
   )

@@ -4,6 +4,8 @@ import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 
+
+
 const QrScanner = ({ onScan, onClose }) => {
   const scannerRef = useRef(null);
   const qrCodeInstance = useRef(null);
@@ -18,7 +20,7 @@ const QrScanner = ({ onScan, onClose }) => {
           await qrCodeInstance.current.stop();
         }
         // Clear the scanner
-        qrCodeInstance.current.clear();
+        await qrCodeInstance.current.clear();
         qrCodeInstance.current = null;
       } catch (e) {
         console.warn("Failed to stop scanner:", e);
@@ -32,51 +34,59 @@ const QrScanner = ({ onScan, onClose }) => {
     }
   };
 
-useEffect(() => {
-  const startScanner = async () => {
-    if (!scannerRef.current) return;
+  useEffect(() => {
+    const startScanner = async () => {
+      if (!scannerRef.current) return;
 
-    qrCodeInstance.current = new Html5Qrcode(scannerRef.current.id);
+      qrCodeInstance.current = new Html5Qrcode(scannerRef.current.id);
 
-    try {
-      await qrCodeInstance.current.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: { width: 250, height: 250 } },
-        (decodedText) => {
-          const raw = decodedText.trim();
-
-          // Stop scanner before navigating
-          stopScanner()
-            .catch((error) => console.warn("Error stopping scanner:", error))
-            .finally(() => {
-              navigate('/payment', { state: { scannedData: raw } });
-              onClose?.();
-              onScan?.(raw);
-            });
-        },
-        (error) => {
-          // Handle decode errors (optional)
-        }
-      );
-    } catch (err) {
-      console.error("Camera access failed:", err);
-    }
-  };
-
-  startScanner();
-
-  // ✅ Correct async cleanup
-  return () => {
-    (async () => {
       try {
-        await stopScanner();
-      } catch (err) {
-        console.warn("Error stopping scanner on cleanup:", err);
-      }
-    })();
-  };
-}, [onScan]);
+        await qrCodeInstance.current.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: { width: 250, height: 250 } },
+          (decodedText) => {
+            const raw = decodedText.trim();
+            // let address = null;
 
+            // Comment out address validation - accept any QR code
+            // if (/^0x[a-fA-F0-9]{32,}$/.test(raw)) address = raw;
+
+            // const uriMatch = raw.match(/^aptos:(0x[a-fA-F0-9]{32,})$/);
+            // if (uriMatch) address = uriMatch[1];
+
+            // try {
+            //   const json = JSON.parse(raw);
+            //   if (json?.address?.startsWith("0x")) address = json.address;
+            // } catch {}
+
+            // Navigate to payment page for any scanned QR code
+            // if (address) {
+              stopScanner();
+              navigate('/payment', { 
+                state: { 
+                  // recipientAddress: address,
+                  scannedData: raw 
+                } 
+              });
+              onClose(); 
+              if (onScan) onScan(raw); // Pass raw data instead of address
+            // } else {
+            //   console.warn("Scanned text is not a valid Aptos address:", raw);
+            // }
+          },
+          (error) => {
+            // Optional: handle scan errors
+          }
+        );
+      } catch (err) {
+        console.error("Camera access failed:", err);
+      }
+    };
+
+    startScanner();
+    return () => stopScanner();  
+    // AYAW MAG STOP
+  }, [onScan]);
 
   return (
     <div className="fixed inset-0 z-50 bg-black">
@@ -92,8 +102,8 @@ useEffect(() => {
       </div>
 
       <button
-        onClick={async () => {
-          await stopScanner();
+        onClick={() => {
+          stopScanner();
           onClose();
         }}
         className="absolute top-4 right-4 z-50 bg-black bg-opacity-50 hover:bg-opacity-80 text-white p-2 rounded-full"

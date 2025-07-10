@@ -29,24 +29,27 @@ export default function Payment() {
   const totalCost = currentAmount + gasFee
   const maxSendableAmount = totalBalance - 0.001 
   
-  // Calculate USD values
   const usdAmount = currentAmount * aptToUsdRate
   const usdTotalCost = totalCost * aptToUsdRate
   const usdBalance = totalBalance * aptToUsdRate
 
   useEffect(() => {
+    const hasReloadedThisSession = sessionStorage.getItem('paymentPageReloadedThisSession')
+    if (!hasReloadedThisSession) {
+      sessionStorage.setItem('paymentPageReloadedThisSession', 'true')
+      window.location.reload()
+    }
+  }, [])
+
+  useEffect(() => {
     if (location.state?.scannedData) {
-      // You can parse the scanned data here if it contains recipient info
       console.log('Scanned data:', location.state.scannedData)
-      // For now, we'll just set a default recipient
       setRecipient('Scanned Recipient')
     } else {
-      // Set static recipient address
       setRecipient('188AAA...BBBB')
     }
   }, [location.state])
 
-  // Track balance status whenever amount or gas fee changes
   useEffect(() => {
     setIsInsufficientBalance(totalCost > totalBalance)
   }, [totalCost, totalBalance])
