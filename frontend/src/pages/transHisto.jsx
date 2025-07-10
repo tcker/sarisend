@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import APT from '../assets/Aptos.png'
 import BTC from '../assets/BTC.png'
 import ETH from '../assets/ETH.png'
+import Homebtn from '../components/homeArrow'
+
 export default function TransHisto() {
   const [filterType, setFilterType] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
@@ -89,12 +91,7 @@ export default function TransHisto() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-6 sm:mb-8">
-          <Link 
-            to="/" 
-            className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-2xl p-2 sm:p-3 text-black" />
-          </Link>
+       <Homebtn />
           <h1 className="text-xl sm:text-2xl font-bold">Transaction History</h1>
           <div className="w-10 sm:w-20"></div> {/* Spacer for center alignment */}
         </div>
