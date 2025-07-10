@@ -1,6 +1,6 @@
 ![Logo](./assets/logo.png)
 
-# SariSend: QR-Based Payments on Aptos
+# [SariSend: QR-Based Payments on Aptos](https://sarisend.vercel.app)
 
 SariSend is a user-friendly payment system that uses QR codes for fast, secure, and affordable transactions. It's built on the Aptos blockchain and is perfect for small businesses, like sari-sari stores, to easily accept digital payments without the high fees of traditional payment methods.
 
