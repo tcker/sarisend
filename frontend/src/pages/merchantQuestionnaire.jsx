@@ -169,12 +169,12 @@ export default function MerchantQuestionnaire() {
               </div>            </div>
             
             
-            <button 
+            {/* <button
               onClick={() => setShowQrScanner(true)}
-              className="w-full text-gray-500 text-right hover:text-green-400 transition-colors cursor-pointer"
+              className="w-full bg-gray-700 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-200"
             >
-              Or scan with your EMVQR 📱
-            </button>
+              📱 Or scan with your EMVQR
+            </button> */}
           </section>
         )}
 
@@ -377,12 +377,24 @@ export default function MerchantQuestionnaire() {
           >
             {currentStep === totalSteps ? 'Complete Registration' : 'Continue'}
           </button>
-
           <div className="text-center">
             <p className="text-xs text-gray-500">
               Step {currentStep} of {totalSteps} • All fields marked with * are required
             </p>
           </div>
+
+          <div className="my-6 flex items-center justify-center">
+            <div className="w-full border-t border-gray-600"></div>
+            <span className="px-4 text-sm text-gray-400 whitespace-nowrap">Register using your QR</span>
+            <div className="w-full border-t border-gray-600"></div>
+          </div>
+
+          <button
+            onClick={() => setShowQrScanner(true)}
+            className="w-full bg-gray-700 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-200"
+          >
+            📱 Or scan with your EMVQR
+          </button>
         </div>
 
         {/* Security Notice */}

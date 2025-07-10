@@ -36,3 +36,8 @@ Move.toml
 /db/
 notes.txt
 Move.toml
+
+# Ignore sensitive files
+/backend/Move.toml
+/backend/db/database.csv
+/backend/notes.txt
