@@ -20,3 +20,19 @@
 *.move
 *.csv
 notes.txt
+
+# Ignore build folder
+/backend/build/
+
+# Ignore database, notes, and config
+db/database.csv
+notes.txt
+Move.toml
+
+# Ignore build output
+/backend/build/
+
+# Ignore local database, notes, and config
+/db/
+notes.txt
+Move.toml
