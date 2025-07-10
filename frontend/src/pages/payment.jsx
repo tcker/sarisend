@@ -33,13 +33,16 @@ export default function Payment() {
   const usdTotalCost = totalCost * aptToUsdRate
   const usdBalance = totalBalance * aptToUsdRate
 
-  useEffect(() => {
-    const hasReloadedThisSession = sessionStorage.getItem('paymentPageReloadedThisSession')
-    if (!hasReloadedThisSession) {
-      sessionStorage.setItem('paymentPageReloadedThisSession', 'true')
-      window.location.reload()
-    }
-  }, [])
+   useEffect(() => {
+     const reloadKey = 'paymentReload'
+     
+     if (!window.name.includes(reloadKey)) {
+       window.name += reloadKey
+       window.location.reload()
+     } else {
+       console.log('Payment Page - Already reloaded, skipping')
+     }
+   }, [])
 
   useEffect(() => {
     if (location.state?.scannedData) {
