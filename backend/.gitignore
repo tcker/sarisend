@@ -1,0 +1,12 @@
+/*.aptos
+/build
+/sarisend
+/node_modules
+/db
+/*.csv
+
+
+
+/*.mv
+*.mv
+*.mvsm

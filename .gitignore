@@ -1,14 +1,22 @@
 /*.aptos
-build/
-sarisend/
-
 /build
 /sarisend
-
 /node_modules
 /db
 /*.csv
-/backend
 
 
 
+/*.mv
+*.mv
+*.mvsm
+
+/backend/build/
+
+# Ignore all Move build artifacts
+/backend/build/
+*.mv
+*.mvsm
+*.move
+*.csv
+notes.txt
