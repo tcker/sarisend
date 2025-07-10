@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import { QrCode, Send, Download, X } from "lucide-react";
+import { QrCode, Send, Download } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import UserProfile from "../components/icon";
 import QrScanner from "../components/QrScanner";
 import QRCode from "qrcode";
@@ -21,6 +22,7 @@ export default function Home() {
   const [mode, setMode] = useState(""); 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const canvasRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedWallet = localStorage.getItem("wallet");
@@ -31,7 +33,6 @@ export default function Home() {
       const diff = now - Number(connectedAt);
       if (diff < 5 * 60 * 1000) {
         setWallet(storedWallet);
-
         setTimeout(() => {
           setWallet("");
           localStorage.removeItem("wallet");
@@ -64,6 +65,8 @@ export default function Home() {
         console.warn("Petra disconnect not supported:", err);
       }
     }
+
+    navigate("/"); // Redirect to root after disconnect
   };
 
   const connectWallet = async () => {
@@ -149,15 +152,15 @@ export default function Home() {
         </h1>
       </section>
 
-          {mode === "scan" && (
-      <QrScanner
-        onScan={(text) => {
-          setReceiver(text);
-          setMode("send");
-        }}
-        onClose={() => setMode("")}
-      />
-    )}
+      {mode === "scan" && (
+        <QrScanner
+          onScan={(text) => {
+            setReceiver(text);
+            setMode("send");
+          }}
+          onClose={() => setMode("")}
+        />
+      )}
 
       <section className="relative z-10 bg-gradient-to-b from-[#FFFDFD]/40 via-[#FFFDFD]/20 to-[#FFFFFF]/0 backdrop-blur-sm border border-gray-600 rounded-2xl p-8 mb-6 mt-10">
         <div
@@ -177,28 +180,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* <section className="relative z-10 flex space-x-4 mb-8">
-        <button
-          onClick={() => setMode("send")}
-          className="flex-1 bg-gradient-to-b from-[#FFFDFD]/40 via-[#FFFDFD]/20 to-[#FFFFFF]/0 backdrop-blur-sm border border-gray-600 rounded-2xl p-6 flex flex-col items-center space-y-2 hover:bg-gray-600/50 transition-colors"
-        >
-          <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
-            <Send className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-green-500 font-medium">Send</span>
-        </button>
-
-        {/* <button
-          onClick={() => setMode("receive")}
-          className="flex-1 bg-gradient-to-b from-[#FFFDFD]/40 via-[#FFFDFD]/20 to-[#FFFFFF]/0 backdrop-blur-sm border border-gray-600 rounded-2xl p-6 flex flex-col items-center space-y-2 hover:bg-gray-600/50 transition-colors"
-        >
-          <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
-            <Download className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-green-500 font-medium">Receive</span>
-        </button>
-      </section> */}
-
       <Ads />
       <Token />
 
@@ -211,5 +192,5 @@ export default function Home() {
         />
       )}
     </main>
-  );    
+  );
 }

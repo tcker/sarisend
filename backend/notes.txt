@@ -1,0 +1,7 @@
+No key given, keeping existing key...
+
+---
+Aptos CLI is now set up for account 0xa6f73c189fefdbf3c1e92291d8baf18f6183f744701e40fb4ea7b1b77546b2f7 as profile default!
+---
+
+The account has not been funded on chain yet. To fund the account and get APT on testnet you must visit https://aptos.dev/network/faucet?address=0xa6f73c189fefdbf3c1e92291d8baf18f6183f744701e40fb4ea7b1b77546b2f7
