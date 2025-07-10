@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { ArrowLeft, Building, MapPin, Phone, Mail, User, FileText, DollarSign } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
+import QrScanner from '../components/QrScanner'
+
 
 export default function MerchantQuestionnaire() {
   const [formData, setFormData] = useState({
@@ -20,6 +22,7 @@ export default function MerchantQuestionnaire() {
   })
   
   const [currentStep, setCurrentStep] = useState(1)
+  const [showQrScanner, setShowQrScanner] = useState(false)
   const totalSteps = 3
   const navigate = useNavigate()
 
@@ -60,6 +63,17 @@ export default function MerchantQuestionnaire() {
       default:
         return false
     }
+  }
+
+  const handleQrScan = (scannedData) => {
+    console.log('QR Code scanned:', scannedData)
+    setShowQrScanner(false)
+    // Navigate to merchant page with scanned data
+    navigate('/merchant', { state: { scannedData, merchantData: formData } })
+  }
+
+  const handleQrClose = () => {
+    setShowQrScanner(false)
   }
 
   return (
@@ -152,8 +166,15 @@ export default function MerchantQuestionnaire() {
                   className="w-full bg-gray-800/50 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-green-500 focus:outline-none transition-colors"
                   required
                 />
-              </div>
-            </div>
+              </div>            </div>
+            
+            
+            <button 
+              onClick={() => setShowQrScanner(true)}
+              className="w-full text-gray-500 text-right hover:text-green-400 transition-colors cursor-pointer"
+            >
+              Or scan with your EMVQR 📱
+            </button>
           </section>
         )}
 
@@ -387,6 +408,19 @@ export default function MerchantQuestionnaire() {
           </div>
         </div>
       </div>
+
+      {/* QR Scanner Modal */}
+      {showQrScanner && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-gray-900 rounded-2xl p-6 w-full max-w-md mx-4">
+            <div className="text-center mb-4">
+              <h3 className="text-xl font-bold text-white mb-2">Scan EMVQR Code</h3>
+              <p className="text-gray-400 text-sm">Point your camera at the EMVQR code</p>
+            </div>
+            <QrScanner onScan={handleQrScan} onClose={handleQrClose} />
+          </div>
+        </div>
+      )}
     </main>
   )
 }

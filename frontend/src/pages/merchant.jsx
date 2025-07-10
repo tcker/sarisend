@@ -167,11 +167,6 @@ export default function Merchant() {
               <div onClick={() => setIsSidebarOpen(true)} className="cursor-pointer">
                 <UserProfile profileImage={user} />
               </div>
-                <button
-                  className="bg-green-500 text-black rounded-full px-6 py-2 font-mono shadow-md shadow-green-500/80 hover:shadow-green-500/90 transition-all duration-200"
-                >
-                  Connect Wallet
-                </button>
             </header>
       <div className="max-w-6xl mx-auto space-y-6">
         
@@ -183,6 +178,13 @@ export default function Merchant() {
             </h1>
             <p>Here are your sales for today with Aptos!</p>
         </div>
+
+        <section className="relative z-10 flex-col items-center gap-2 mb-4">
+                <p>Balance</p>
+                <h1 className="text-4xl text-green-400">
+                    $123,456
+                </h1>
+              </section>
 
         {/* Stats Grid - Mobile First */}
         <section aria-labelledby="stats-heading">

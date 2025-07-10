@@ -44,7 +44,7 @@ export default function Welcome() {
       subtitle: 'Experience seamless transactions with SariSend.',
       image: three,
       showDots: true,
-      showContinue: true
+      isLast:true
     },
   ]
 
