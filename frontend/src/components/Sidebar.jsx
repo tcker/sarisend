@@ -54,11 +54,7 @@ export default function Sidebar({
       >
         <header className="flex items-center justify-between p-6 border-b border-gray-700/50">
           <div className="flex items-center space-x-3">
-            <img
-              src={profileImage}
-              alt={`${displayName}'s profile`}
-              className="w-12 h-12 rounded-full object-cover border-2 border-gray-600"
-            />
+           
             <div>
               <h2
                 id="sidebar-title"
