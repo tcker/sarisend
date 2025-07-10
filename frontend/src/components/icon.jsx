@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 
 export default function UserProfile({
   walletAddress = "",
-  profileImage = "/logo.png",
+  profileImage = "/logo.",
   size = "medium",
   className = "",
 }) {
@@ -41,7 +41,7 @@ export default function UserProfile({
         <img
           src={profileImage}
           alt="User profile"
-          className={`${currentSize.image} rounded-full object-cover border-2 border-gray-600`}
+          className={`${currentSize.image} rounded-full object-cover`}
           onError={(e) => {
             e.target.src =
               "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E";

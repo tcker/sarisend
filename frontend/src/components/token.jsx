@@ -2,6 +2,9 @@ import React from 'react'
 import apt from "../assets/Aptos.png"
 import btc from "../assets/BTC.png"
 import eth from "../assets/ETH.png"
+import cl from '../assets/CL.png'
+import dm from '../assets/DM.png'
+import cos from '../assets/Cos.png'
 import { MoreHorizontal } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -16,44 +19,44 @@ export default function Token() {
       icon: apt
     },
     { 
-      name: 'BTC', 
+      name: 'BitCoin', 
       symbol: 'BTC', 
       value: '$100', 
-      change: '-0.18%', 
+      change: '-0.19%', 
       positive: false,
       icon: btc
     },
     { 
-      name: 'ETH', 
+      name: 'Etherium', 
       symbol: 'ETH', 
       value: '$40', 
-      change: '+0.18%', 
+      change: '+0.24%', 
       positive: true,
       icon: eth
     },
     { 
-      name: 'Aptos', 
-      symbol: 'APT', 
+      name: 'ChainLink', 
+      symbol: 'LINK', 
       value: '$100', 
       change: '+0.18%', 
       positive: true,
-      icon: apt
+      icon: cl
     },
     { 
-      name: 'BTC', 
-      symbol: 'BTC', 
+      name: 'Cosmos', 
+      symbol: 'ATOM', 
       value: '$100', 
-      change: '-0.18%', 
+      change: '-0.10%', 
       positive: false,
-      icon: btc
+      icon: cos
     },
     { 
-      name: 'ETH', 
-      symbol: 'ETH', 
+      name: 'Diem', 
+      symbol: 'DLB', 
       value: '$40', 
-      change: '+0.18%', 
+      change: '+0.07%', 
       positive: true,
-      icon: eth
+      icon: dm
     }
   ];
 

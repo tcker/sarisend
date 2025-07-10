@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import UserProfile from "../components/icon";
 import QrScanner from "../components/QrScanner";
 import QRCode from "qrcode";
-import user from "../assets/userPfp.jpg";
+// import user from "../assets/userPfp.jpg";
+import menu from '../assets/Menu Button.png'
 import Ellipsis from "../assets/Ellipse.png";
 import Token from "../components/token";
 import Ads from "../components/ads";
@@ -90,7 +91,7 @@ export default function Home() {
   //   if (!receiver || !amount) return alert("Missing receiver or amount");
 
   //   const payload = {
-  //     type: "entry_function_payload",
+  //     type: "entry_function_payload",png
   //     function: FUNCTION_NAME,
   //     arguments: [receiver, amount],
   //     type_arguments: [],
@@ -128,7 +129,7 @@ export default function Home() {
 
       <header className="relative flex items-center justify-between mb-8 pt-4">
         <div onClick={() => setIsSidebarOpen(true)} className="cursor-pointer">
-          <UserProfile profileImage={user} walletAddress={wallet} />
+          <UserProfile profileImage={menu} walletAddress={wallet} />
         </div>
 
         {!wallet ? (

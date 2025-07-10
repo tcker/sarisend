@@ -1,6 +1,7 @@
 import React from 'react'
 import { ArrowLeft, Shield, Users, Zap, Globe } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
+import Logo from '../assets/logo.png';
 
 export default function About() {
   const navigate = useNavigate()
@@ -29,7 +30,7 @@ export default function About() {
         <div className="bg-gradient-to-r from-green-500/20 to-blue-500/20 rounded-3xl p-8 mb-8 border border-green-500/30">
           <div className="text-center">
             <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <img src="/assets/logo.png" alt="SariSend Logo" className="w-12 h-12" />
+              <div logo={Logo} className="w-12 h-12" />
             </div>
             <h2 className="text-3xl font-bold mb-4">SariSend Wallet</h2>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
