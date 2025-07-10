@@ -1,4 +1,8 @@
+<div align="center">
+
 ![Logo](./assets/logo.png)
+
+</div>
 
 # [SariSend: QR-Based Payments on Aptos](https://sarisend.vercel.app)
 
