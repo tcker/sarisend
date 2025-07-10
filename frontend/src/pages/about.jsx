@@ -1,20 +1,26 @@
 import React from 'react'
 import { ArrowLeft, Shield, Users, Zap, Globe } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function About() {
+  const navigate = useNavigate()
+  const goBack = () => {
+    navigate(-1) // Goes back one page in history
+  }
+  
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white">
       <div className="max-w-4xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <Link 
-            to="/Home" 
+          <button 
+            onClick={goBack}
             className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Home</span>
-          </Link>
+          </button>
           <h1 className="text-2xl font-bold">About SariSend</h1>
           <div className="w-20"></div> {/* Spacer for center alignment */}
         </div>
