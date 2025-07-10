@@ -71,22 +71,20 @@ export default function Home() {
 
   const connectWallet = async () => {
     if (!window.aptos) return alert("Petra Wallet not found");
-
-    try {
       const res = await window.aptos.connect();
       setWallet(res.address);
       localStorage.setItem("wallet", res.address);
       localStorage.setItem("connectedAt", Date.now().toString());
-
-      setTimeout(() => {
-        setWallet("");
-        localStorage.removeItem("wallet");
-        localStorage.removeItem("connectedAt");
-      }, 5 * 60 * 1000);
-    } catch (e) {
-      alert("Failed to connect Petra Wallet");
     }
-  };
+  //     setTimeout(() => {
+  //       setWallet("");
+  //       localStorage.removeItem("wallet");
+  //       localStorage.removeItem("connectedAt");
+  //     }, 5 * 60 * 1000);
+  //   } catch (e) {
+  //     alert("Failed to connect Petra Wallet");
+  //   }
+  // };
 
   const sendAPT = async () => {
     if (!receiver || !amount) return alert("Missing receiver or amount");

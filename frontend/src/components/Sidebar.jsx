@@ -12,7 +12,6 @@ export default function Sidebar({
   isMerchant = false, // New prop to determine if user is merchant
 }) {
   const navigate = useNavigate();
-
   const menuItems = [
     { 
       icon: History, 
