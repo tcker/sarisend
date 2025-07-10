@@ -32,76 +32,51 @@ const QrScanner = ({ onScan, onClose }) => {
     }
   };
 
-  useEffect(() => {
-    const startScanner = async () => {
-      if (!scannerRef.current) return;
+useEffect(() => {
+  const startScanner = async () => {
+    if (!scannerRef.current) return;
 
-      qrCodeInstance.current = new Html5Qrcode(scannerRef.current.id);
+    qrCodeInstance.current = new Html5Qrcode(scannerRef.current.id);
 
+    try {
+      await qrCodeInstance.current.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 250, height: 250 } },
+        (decodedText) => {
+          const raw = decodedText.trim();
+
+          // Stop scanner before navigating
+          stopScanner()
+            .catch((error) => console.warn("Error stopping scanner:", error))
+            .finally(() => {
+              navigate('/payment', { state: { scannedData: raw } });
+              onClose?.();
+              onScan?.(raw);
+            });
+        },
+        (error) => {
+          // Handle decode errors (optional)
+        }
+      );
+    } catch (err) {
+      console.error("Camera access failed:", err);
+    }
+  };
+
+  startScanner();
+
+  // ✅ Correct async cleanup
+  return () => {
+    (async () => {
       try {
-        await qrCodeInstance.current.start(
-          { facingMode: "environment" },
-          { fps: 10, qrbox: { width: 250, height: 250 } },
-          (decodedText) => {
-            const raw = decodedText.trim();
-            // let address = null;
-
-            // Comment out address validation - accept any QR code
-            // if (/^0x[a-fA-F0-9]{32,}$/.test(raw)) address = raw;
-
-            // const uriMatch = raw.match(/^aptos:(0x[a-fA-F0-9]{32,})$/);
-            // if (uriMatch) address = uriMatch[1];
-
-            // try {
-            //   const json = JSON.parse(raw);
-            //   if (json?.address?.startsWith("0x")) address = json.address;
-            // } catch {}
-
-            // Navigate to payment page for any scanned QR code
-            // if (address) {
-              stopScanner().then(() => {
-                // Only navigate after scanner is fully stopped
-                navigate('/payment', { 
-                  state: { 
-                    // recipientAddress: address,
-                    scannedData: raw 
-                  } 
-                });
-                onClose(); 
-                if (onScan) onScan(raw); // Pass raw data instead of address
-              }).catch((error) => {
-                console.warn("Error stopping scanner before navigation:", error);
-                // Navigate anyway but log the error
-                navigate('/payment', { 
-                  state: { 
-                    scannedData: raw 
-                  } 
-                });
-                onClose();
-                if (onScan) onScan(raw);
-              });
-            // } else {
-            //   console.warn("Scanned text is not a valid Aptos address:", raw);
-            // }
-          },
-          (error) => {
-            // Optional: handle scan errors
-          }
-        );
+        await stopScanner();
       } catch (err) {
-        console.error("Camera access failed:", err);
+        console.warn("Error stopping scanner on cleanup:", err);
       }
-    };
+    })();
+  };
+}, [onScan]);
 
-    startScanner();
-    return () => {
-      // Cleanup function - ensure scanner stops when component unmounts
-      stopScanner().catch((error) => {
-        console.warn("Error stopping scanner on cleanup:", error);
-      });
-    };
-    // AYAW MAG STOP - Fixed with proper async cleanup
-  }, [onScan]);
 
   return (
     <div className="fixed inset-0 z-50 bg-black">

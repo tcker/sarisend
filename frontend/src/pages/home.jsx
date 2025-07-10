@@ -186,9 +186,11 @@ export default function Home() {
       {isSidebarOpen && (
         <Sidebar
           isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
-          walletAddress={wallet}
-          disconnectWallet={disconnectWallet}
+          onClose={closeSidebar}
+          walletAddress={walletAddress}
+          disconnectWallet={disconnect}
+          profileImage={user}
+          userType="user"
         />
       )}
     </main>

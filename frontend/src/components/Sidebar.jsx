@@ -8,7 +8,7 @@ export default function Sidebar({
   onClose,
   walletAddress = "",
   disconnectWallet,
-  profileImage = user,
+  profileImage = user,  
 }) {
   const menuItems = [
     { icon: History, label: "Transaction History", to: "/transaction-history" },
@@ -16,10 +16,15 @@ export default function Sidebar({
     { icon: Info, label: "About", to: "/about" },
   ];
 
-  const displayName =
-    walletAddress && walletAddress.length >= 10
-      ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
-      : "";
+      const [displayName, setDisplayName] = React.useState("")
+
+      useEffect(() => {
+        if (walletAddress && walletAddress.length >= 10) {
+          setDisplayName(`${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`)
+        } else {
+          setDisplayName("")
+        }
+      }, [walletAddress])
 
   const sidebarRef = useRef();
 
