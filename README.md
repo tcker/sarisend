@@ -8,6 +8,8 @@
 
 > 📱 **Mobile-first, but fully usable on desktop as well.**
 
+[GitBook SariSend](https://sarisend.gitbook.io/)
+
 SariSend is a user-friendly payment system that uses QR codes for fast, secure, and affordable transactions. It's built on the Aptos blockchain and is perfect for small businesses, like sari-sari stores, to easily accept digital payments without the high fees of traditional payment methods.
 
 ## For Everyone: What is SariSend?
