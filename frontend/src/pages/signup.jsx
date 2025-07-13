@@ -3,6 +3,8 @@ import { QrCode, User, Store } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import petra from "../assets/petra.png";
 import google from "../assets/GoogleIcon.webp";
+// import { appKit } from '../utils/appKit';
+
 
 export default function Signup() {
   const [isConnecting, setIsConnecting] = useState(false);
@@ -10,31 +12,53 @@ export default function Signup() {
   const [userType, setUserType] = useState(null);
   const navigate = useNavigate();
 
-  const handlePetraConnect = async () => {
-    if (!window.aptos) {
-      alert("Petra Wallet not found. Please install it.");
-      return;
-    }
+// const handlePetraConnect = async () => {
+//   try {
+//     setIsConnecting(true)
 
-    try {
-      setIsConnecting(true);
-      const res = await window.aptos.connect();
-      const walletAddress = res.address;
+//     const connectedWallet = await appKit.connect()
+//     const walletAddress = connectedWallet.account.address
 
-      localStorage.setItem("wallet", walletAddress);
-      localStorage.setItem("connectedAt", Date.now().toString());
+//     localStorage.setItem('wallet', walletAddress)
+//     localStorage.setItem('connectedAt', Date.now().toString())
 
-      setIsConnecting(false);
-      setIsConnected(true);
+//     setIsConnected(true)
+//     setIsConnecting(false)
 
-      console.log("Connected to Petra Wallet:", walletAddress);
-      navigate("/Home");
-    } catch (err) {
-      setIsConnecting(false);
-      console.error("Failed to connect to Petra Wallet:", err);
-      alert("Failed to connect to Petra Wallet");
-    }
-  };
+//     navigate('/Home')
+//   } catch (err) {
+//     setIsConnecting(false)
+//     console.error('AppKit connection failed:', err)
+//     alert('Failed to connect to wallet')
+//   }
+// }
+
+
+  // const handlePetraConnect = async () => {
+  //   if (!window.aptos) {
+  //     alert("Petra Wallet not found. Please install it.");
+  //     return;
+  //   }
+
+  //   try {
+  //     setIsConnecting(true);
+  //     const res = await window.aptos.connect();
+  //     const walletAddress = res.address;
+
+  //     localStorage.setItem("wallet", walletAddress);
+  //     localStorage.setItem("connectedAt", Date.now().toString());
+
+  //     setIsConnecting(false);
+  //     setIsConnected(true);
+
+  //     console.log("Connected to Petra Wallet:", walletAddress);
+  //     navigate("/Home");
+  //   } catch (err) {
+  //     setIsConnecting(false);
+  //     console.error("Failed to connect to Petra Wallet:", err);
+  //     alert("Failed to connect to Petra Wallet");
+  //   }
+  // };
 
   const handleUserTypeSelection = (type) => {
     setUserType(type);
