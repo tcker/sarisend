@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Line } from 'react-chartjs-2'
 import UserProfile from '../components/icon'
 import Sidebar from '../components/Sidebar'
-import user from '../assets/userPfp.jpg'
+// import user from '../assets/userPfp.jpg'
+import menu from '../assets/Menu Button.png'
 import Ellipsis from '../assets/Ellipse.png'
 import Ads from '../components/ads'
 import Token from '../components/token'
@@ -180,7 +181,7 @@ export default function Merchant() {
       
             <header className="relative flex items-center justify-between mb-8 pt-4">
               <div onClick={() => setIsSidebarOpen(true)} className="cursor-pointer">
-                <UserProfile profileImage={user} />
+                <UserProfile profileImage={menu} />
               </div>
             </header>
       <div className="max-w-6xl mx-auto space-y-6">
@@ -291,7 +292,7 @@ export default function Merchant() {
       onClose={() => setIsSidebarOpen(false)}
       walletAddress={walletAddress}
       disconnectWallet={() => console.log('Disconnecting wallet...')}
-      profileImage={user}
+      profileImage={menu}
       isMerchant={true} // Important: Set to true for merchant mode
     />
     </main>
